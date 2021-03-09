@@ -4,11 +4,11 @@ from os import mkdir
 dirs = ["./cache"]
 for dir in dirs:
     try:
-        mkdir(path)
+        mkdir(dir)
     except OSError:
-        print ("Creation of the directory %s failed" % path)
+        print (f'Creation of the directory `{dir}` failed.')
     else:
-        print ("Successfully created the directory %s " % path)
+        print (f'Successfully created the directory `{dir}`.')
 
 install_requires = [
     'requests',
