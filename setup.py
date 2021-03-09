@@ -1,14 +1,9 @@
 import setuptools
 from os import mkdir
 
-dirs = ["./cache"]
+dirs = ["cache"]
 for dir in dirs:
-    try:
-        mkdir(dir)
-    except OSError:
-        print (f'Creation of the directory `{dir}` failed.')
-    else:
-        print (f'Successfully created the directory `{dir}`.')
+    mkdir(dir)
 
 install_requires = [
     'requests',
