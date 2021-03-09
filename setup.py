@@ -1,9 +1,17 @@
 import setuptools
-from os import mkdir
+import os
+from sys import exit
 
-dirs = ["cache"]
-for dir in dirs:
-    mkdir(dir)
+try:
+    dirs = ["cache"]
+    cwd = os.getcwd()
+    for dir in dirs:
+        abs_dir = os.path.join(cwd, dir)
+        if not os.path.exists(abs_dir):
+            os.mkdir(abs_dir)
+except:
+    print('Directory creation failed.')
+    exit(-1)
 
 install_requires = [
     'requests',
