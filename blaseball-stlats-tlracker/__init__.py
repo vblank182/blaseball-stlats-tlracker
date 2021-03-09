@@ -1,5 +1,5 @@
 """
-blaseball-stlats-tlracker
+blaseball_stlats_tlracker
 """
 
 # Reference:  https://betterscientificsoftware.github.io/python-for-hpc/tutorials/python-pypi-packaging/

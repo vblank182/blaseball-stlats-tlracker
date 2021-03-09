@@ -1,4 +1,4 @@
-import blaseball-stlats-tlracker.py as bst
+import blaseball_stlats_tlracker as bst
 
 playerNameList = ["Goodwin Morin", "Wyatt Glover", "York Silk"]
 

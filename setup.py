@@ -6,7 +6,7 @@ install_requires = [
     ]
 
 setuptools.setup(
-    name='blaseball-stlats-tlracker',
+    name='blaseball_stlats_tlracker',
     version='0.1',
     description='Blaseball Stlats Tlracker',
     url='https://github.com/vblank182/blaseball-stlats-tlracker',
