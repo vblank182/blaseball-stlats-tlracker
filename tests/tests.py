@@ -1,13 +1,8 @@
 import os
 a=os.walk(".")
-print(a.__next__())
-print(a.__next__())
-print(a.__next__())
-print(a.__next__())
-print(a.__next__())
-print(a.__next__())
-print(a.__next__())
-print(a.__next__())
+for _ in range(50):
+    print(a.__next__())
+
 
 import blaseball_stlats_tlracker.main as bst
 

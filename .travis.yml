@@ -5,7 +5,4 @@ install:
     - pip install -r requirements.txt
     - pip install .
 script:
-    - bash ls -lash
-    - bash ls -lash blaseball-stlats-tlracker
-    - bash ls -lash tests
     - python tests/tests.py
