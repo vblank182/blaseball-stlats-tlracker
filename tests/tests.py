@@ -1,11 +1,9 @@
 import blaseball_stlats_tlracker.main as bst
-import blaseball_stlats_tlracker.build_webpage as bw
 
 import os
 cwd = os.getcwd()
 
-
-playerNameList = ["Goodwin Morin"]#["Goodwin Morin", "Wyatt Glover", "York Silk"]
+playerNameList = ["Goodwin Morin"]
 
 plIDs = bst.getPlayerIDs(playerNameList)
 fields = ['batting_average']
@@ -20,8 +18,3 @@ for stats in stats_list:
 print("----------------------------------------------------------------")
 print()
 print(f'[Debug] API requests made: {bst.requests_made}')
-
-
-### TEST
-abs_dir = os.path.join(cwd, "web", "results.html")
-bw.generatePage(abs_dir, [stats_list[0][0], stats_list[0][2], stats_list[0][1]["batting_average"]])
