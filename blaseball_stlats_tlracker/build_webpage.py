@@ -45,7 +45,7 @@ cwd = os.getcwd()
 print(cwd)
 print("--------------------------------")
 print(next(os.walk('.'))[1])
-print(next(os.walk('..'))[1])
+print(next(os.walk('./web'))[1])
 print("--------------------------------")
 
 playerNameList = ["Goodwin Morin"]
@@ -65,7 +65,7 @@ with open(test_dir, "w") as f:
     print("written")
     print("--------------------------------")
     print(next(os.walk('.'))[1])
-    print(next(os.walk('..'))[1])
+    print(next(os.walk('./web'))[1])
     print("--------------------------------")
 
 #############
