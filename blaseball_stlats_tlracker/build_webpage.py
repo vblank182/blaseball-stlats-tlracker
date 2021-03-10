@@ -70,8 +70,10 @@ with open(test_dir, "w") as f:
 
 #############
 print("...")
-sleep(10)
-print(next(os.walk('./web'))[2])
+
+for _ in range(100):
+    sleep(10)
+    print(next(os.walk('./web'))[2])
 
 
 #############
