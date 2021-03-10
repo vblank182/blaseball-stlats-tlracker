@@ -5,6 +5,7 @@
 ### TEST ###
 import main as bst
 import os
+from time import sleep
 ############
 
 
@@ -44,7 +45,7 @@ def generatePage(path, content):
 cwd = os.getcwd()
 print(cwd)
 print("--------------------------------")
-print(next(os.walk('.'))[1])
+#print(next(os.walk('.'))[1])
 print(next(os.walk('./web'))[2])
 print("--------------------------------")
 
@@ -56,16 +57,21 @@ stats_list = bst.requestPlayerStatsFromAPI(plIDs, fields)
 abs_dir = os.path.join(cwd, "web", "results.html")
 print(abs_dir)
 generatePage(abs_dir, [stats_list[0][0], stats_list[0][2], stats_list[0][1]["batting_average"]])
-print("done")
 
 test_dir = os.path.join(cwd, "web", "index.html")
 print(test_dir)
 with open(test_dir, "w") as f:
     f.write("<html><body>Test Results Page</body></html>")
-    print("written")
+
     print("--------------------------------")
-    print(next(os.walk('.'))[1])
+    #print(next(os.walk('.'))[1])
     print(next(os.walk('./web'))[2])
     print("--------------------------------")
+
+#############
+print("...")
+sleep(10)
+print(next(os.walk('./web'))[2])
+
 
 #############
