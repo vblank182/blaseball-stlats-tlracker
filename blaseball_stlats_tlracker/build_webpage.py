@@ -3,7 +3,7 @@
 # Requires Python >= 3.9
 
 ### TEST ###
-import blaseball_stlats_tlracker.main as bst
+import main.py as bst
 import os
 ############
 
