@@ -1,13 +1,9 @@
+import blaseball_stlats_tlracker.main as bst
+
 import os
 a=os.walk(".")
 for _ in range(50):
     print(a.__next__())
-
-
-import blaseball_stlats_tlracker.main as bst
-
-
-
 
 
 playerNameList = ["Goodwin Morin", "Wyatt Glover", "York Silk"]
