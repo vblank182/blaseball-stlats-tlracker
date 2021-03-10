@@ -1,2 +1,2 @@
-web: vendor/bin/heroku-php-apache2 web/
+web: gunicorn --chdir web app:bst
 worker: python blaseball_stlats_tlracker/build_webpage.py
