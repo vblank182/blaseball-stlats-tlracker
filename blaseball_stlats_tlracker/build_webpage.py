@@ -51,11 +51,11 @@ stats_list = bst.requestPlayerStatsFromAPI(plIDs, fields)
 abs_dir = os.path.join(folder, "web", "results.html")
 generatePage(abs_dir, [stats_list[0][0], stats_list[0][2], stats_list[0][1]["batting_average"]])
 
-
+print('results------------')
 
 
 test_dir = os.path.join(folder, "web", "index.html")
-    with open(path, "w") as f:
+    with open(test_dir, "w") as f:
         f.write("<html><body>Test Results Page</body></html>")
 
 #############
