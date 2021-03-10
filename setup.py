@@ -1,15 +1,5 @@
 import setuptools
-import os
 from sys import exit
-
-
-dirs = ["cache"]
-cwd = os.getcwd()
-for dir in dirs:
-    abs_dir = os.path.join(cwd, dir)
-    if not os.path.exists(abs_dir):
-        os.mkdir(abs_dir)
-
 
 install_requires = [
     'requests',
