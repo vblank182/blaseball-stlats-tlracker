@@ -3,7 +3,7 @@
 # Requires Python >= 3.9
 
 ### TEST ###
-import main.py as bst
+import main as bst
 import os
 ############
 
