@@ -1,9 +1,21 @@
 import blaseball_stlats_tlracker.main as bst
 
+# import os
+# a=os.walk(".")
+# for _ in range(50):
+#     print(a.__next__())
+
 import os
-a=os.walk(".")
-for _ in range(50):
-    print(a.__next__())
+
+
+dirs = ["cache"]
+cwd = os.getcwd()
+print(cwd)
+for dir in dirs:
+    abs_dir = os.path.join(cwd, dir)
+    if not os.path.exists(abs_dir):
+        os.mkdir(abs_dir)
+
 
 
 playerNameList = ["Goodwin Morin", "Wyatt Glover", "York Silk"]
