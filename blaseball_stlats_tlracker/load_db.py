@@ -8,7 +8,7 @@ def saveData():
 
     ## TEST
     import redis, os
-    redis_url = os.getenv("REDIS_URL")
+    redis_url = os.getenv("REDIS_URL").encode("idna")  # encode properly for redis package
     rd = redis.Redis(redis_url)
 
     s = rd.set('foo', 'bar')
