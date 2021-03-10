@@ -1,24 +1,5 @@
 import blaseball_stlats_tlracker.main as bst
 
-# import os
-# a=os.walk(".")
-# for _ in range(50):
-#     print(a.__next__())
-
-import os
-
-
-dirs = ["cache"]
-cwd = os.getcwd()
-print(cwd)
-for dir in dirs:
-    abs_dir = os.path.join(cwd, dir)
-    if not os.path.exists(abs_dir):
-        os.mkdir(abs_dir)
-
-for root, dirs, files in os.walk(cwd):
-    print("{0} has {1} files".format(root, len(files)))
-
 playerNameList = ["Goodwin Morin", "Wyatt Glover", "York Silk"]
 
 plIDs = bst.getPlayerIDs(playerNameList)

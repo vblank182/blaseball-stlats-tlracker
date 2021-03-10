@@ -3,14 +3,20 @@
 # Requires Python >= 3.9
 
 import sys
-from os import path
+import os
 from urllib.parse import quote
 import requests
 import pickle
 
 requests_made = 0
-path_cache_playerIDs = path.join('cache', 'blaseball_player_id_cache.pickle')
+path_cache_playerIDs = os.path.join('cache', 'blaseball_player_id_cache.pickle')
 
+def _createDirectory(dir):
+    # Helper to set up directories
+    cwd = os.getcwd()
+    abs_dir = os.path.join(cwd, dir)
+    if not os.path.exists(abs_dir):
+        os.mkdir(abs_dir)
 
 def requestPlayerIDsFromAPI(players):
     # Takes a list of player names and returns a dict of IDs from the blaseball-reference API
@@ -81,8 +87,10 @@ def getPlayerIDs(players):
     # Retrieves player IDs from either a cache file or the API and returns a dict of players and IDs
 
     # If cache file does not exist, get all of our IDs from the API, and create a cache file
-    if not path.exists(path_cache_playerIDs):
+    if not os.path.exists(path_cache_playerIDs):
         playerIDs = requestPlayerIDsFromAPI(players)
+
+        _createDirectory("cache")  # Make sure directory exists
 
         with open(path_cache_playerIDs, 'w+b') as f:
             pickle.dump(playerIDs, f)  # Create a new cache file and save IDs
@@ -109,7 +117,6 @@ def getPlayerIDs(players):
         # Return only the IDs that were requested
         playerIDsRequestedOnly = {k:playerIDs[k] for k in players}
         return playerIDsRequestedOnly
-
 
 
 if __name__ == '__main__':
