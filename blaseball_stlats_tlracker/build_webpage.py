@@ -2,6 +2,12 @@
 # Jesse Williams 🎸
 # Requires Python >= 3.9
 
+### TEST ###
+import blaseball_stlats_tlracker.main as bst
+import os
+############
+
+
 def generatePage(path, content):
 
     html_start = """
@@ -31,3 +37,17 @@ def generatePage(path, content):
     # Create/overwrite the HTML file at `path` with the newly generated one.
     with open(path, "w") as f:
         f.write("".join(html))
+
+
+
+### TEST ###
+cwd = os.getcwd()
+
+playerNameList = ["Goodwin Morin"]
+plIDs = bst.getPlayerIDs(playerNameList)
+fields = ['batting_average']
+stats_list = bst.requestPlayerStatsFromAPI(plIDs, fields)
+
+abs_dir = os.path.join(cwd, "web", "results.html")
+generatePage(abs_dir, [stats_list[0][0], stats_list[0][2], stats_list[0][1]["batting_average"]])
+#############
