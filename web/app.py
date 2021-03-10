@@ -6,20 +6,21 @@ bst_frontend = Flask(__name__)
 def index():
 
     # Load current count
-    f = open("count.txt", "r")
-    count = int(f.read())
-    f.close()
+    with open("count.txt", "r") as f:
+        count = int(f.read())
 
     # Increment the count
     count += 1
 
     # Overwrite the count
-    f = open("count.txt", "w")
-    f.write(str(count))
-    f.close()
+    with open("count.txt", "w") as f:
+        f.write(str(count))
+
+    # Make some test data
+    data = {'name': "Goodwin Morin", 'ba': 0.369}
 
     # Render HTML with count variable
-    return render_template("index.html", count=count)
+    return render_template("index.html", count=count, data=data)
 
 if __name__ == "__main__":
     bst_frontend.run()
