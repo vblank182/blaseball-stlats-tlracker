@@ -1,5 +1,5 @@
-# Blaseball Stlats Tlracker
-# Jesse Williams 🎸 (vblank182)
+# Blaseball Stlats Tlracker - Main Functions
+# Jesse Williams 🎸
 # Requires Python >= 3.9
 
 import sys
@@ -126,8 +126,6 @@ if __name__ == '__main__':
     plIDs = getPlayerIDs(playerNameList)
 
 
-
-
     # For list of allowed fields, see 'dataField's in https://api.blaseball-reference.com/v2/config
     ## TODO: Make a function to parse /v2/config and generate list of options. Possible make a class to represent a general option set.
     fields = ['batting_average', 'hits', 'home_runs', 'stolen_bases']
@@ -142,14 +140,7 @@ if __name__ == '__main__':
     print("----------------------------------------------------------------")
     print()
 
-
     print(f'[Debug] API requests made: {requests_made}')
-
-
-
 
     # {'Aldon Cashmoney': 'efafe75e-2f00-4418-914c-9b6675d39264', 'York Silk': '86d4e22b-f107-4bcf-9625-32d387fcb521', 'Goodwin Morin': '864b3be8-e836-426e-ae56-20345b41d03d'}
     # efafe75e-2f00-4418-914c-9b6675d39264,86d4e22b-f107-4bcf-9625-32d387fcb521,864b3be8-e836-426e-ae56-20345b41d03d
-
-
-    ## TODO: Construct an HTML page with results and upload to a webserver, updating the page each time script is run.
