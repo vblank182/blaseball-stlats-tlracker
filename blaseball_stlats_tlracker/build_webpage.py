@@ -41,13 +41,13 @@ def generatePage(path, content):
 
 
 ### TEST ###
-cwd = os.getcwd()
+folder = os.path.dirname(os.getcwd())
 
 playerNameList = ["Goodwin Morin"]
 plIDs = bst.getPlayerIDs(playerNameList)
 fields = ['batting_average']
 stats_list = bst.requestPlayerStatsFromAPI(plIDs, fields)
 
-abs_dir = os.path.join(cwd, "web", "results.html")
+abs_dir = os.path.join(folder, "web", "results.html")
 generatePage(abs_dir, [stats_list[0][0], stats_list[0][2], stats_list[0][1]["batting_average"]])
 #############
