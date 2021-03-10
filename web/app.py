@@ -1,8 +1,8 @@
 from flask import Flask, render_template
 
-app = Flask(__name__)
+bst_frontend = Flask(__name__)
 
-@app.route("/")
+@bst_frontend.route("/")
 def index():
 
     # Load current count
@@ -22,4 +22,4 @@ def index():
     return render_template("index.html", count=count)
 
 if __name__ == "__main__":
-    app.run()
+    bst_frontend.run()
