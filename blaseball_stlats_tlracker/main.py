@@ -181,7 +181,7 @@ def updatePlayerIdCache(playerNames):
             print(f'[Debug] ID found in keystore -- {playerName}:{playerID}')
         else:
             # If we don't have the ID cached, get it from the API and save to DB as (name:id) pairs
-            playerID = _requestPlayerIDsFromAPI(playerName)
+            playerID = _requestPlayerIDsFromAPI(playerName)[playerName]  # this returns a dict so we need to get the value
             rd.set(playerName, playerID)
             print(f'[Debug] ID not found in keystore, loaded from API -- {playerName}:{playerID}')
 
