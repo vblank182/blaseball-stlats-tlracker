@@ -1,6 +1,7 @@
 # Blaseball Stlats Tlracker - Update stlats Redis DB with fresh data
 # Jesse Williams 🎸
-# Requires Python >= 3.9
+
+# ---- DEPRECATED ---- #
 
 ###-#-#-#-#-###
 ###  Redis  ###
@@ -20,24 +21,18 @@
 #  lpop(): Used to read a single value from the left of the list
 #  lrange(): Used to read a range of values from a list, or the entire list
 
-
 import redis, os, re
-from urllib import parse
 from time import sleep
-import main as bst
 
-def saveData():
-    # Data:
-    # {fullName, location, team_nickname, team_emoji, }
-
+def update():
     # Get Redis location URL from Heroku env variable
     rd_url = os.getenv("REDIS_URL")
 
     # Separate parts of URI for Redis constructor
     rd_scheme, rd_pw, rd_host, rd_port = re.search("(\w+)\:\/\/\:([\w\d]+)\@(.+)\:(\d+)", rd_url).groups()
 
+    # Open Redis connection
     rd = redis.Redis(host=rd_host, port=rd_port, password=rd_pw)
-
 
     player_id_dict = bst.getPlayerIDs(["Goodwin Morin", "York Silk", "Aldon Cashmoney"])
 
@@ -59,13 +54,12 @@ def saveData():
 
         player_ids.append(player[0])
 
-    print('________________')
-    print( rd.lrange(player_ids[0], 0, -1) )
-    print('________________')
-    print( rd.lrange(player_ids[1], 0, -1) )
-    print('________________')
-    print( rd.lrange(player_ids[2], 0, -1) )
-    print('^^^^^^^^^^^^^^^^')
+        ## TODO: Log requests made to/from DB and return total to main
 
-saveData()
-sleep(5*60)
+    # print('________________')
+    # print( rd.lrange(player_ids[0], 0, -1) )
+    # print('________________')
+    # print( rd.lrange(player_ids[1], 0, -1) )
+    # print('________________')
+    # print( rd.lrange(player_ids[2], 0, -1) )
+    # print('^^^^^^^^^^^^^^^^')
