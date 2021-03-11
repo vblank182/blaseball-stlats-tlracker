@@ -4,7 +4,7 @@
 ## TODO: Possibly need to convert all data pulled from Redis from a bytestring to a string
 
 ## Notes
-# Values pulled from the Redis DB will be in raw byte string format and need to be converted with `.decode('utf-8')` before using as strings
+# Values pulled from the Redis DB will be in raw byte string format and need to be converted with `.decode("utf-8")` before using as strings
 
 import sys, os, re
 from urllib.parse import quote
@@ -179,7 +179,7 @@ def updatePlayerIdCache(playerNames):
     rd = _connectToRedis()
 
     for playerName in playerNames:
-        playerID = rd.get(playerName).decode('utf-8')  # Check DB for player name:id (returns None if no key exists)
+        playerID = rd.get(playerName).decode("utf-8")  # Check DB for player name:id (returns None if no key exists)
         if playerID:
             # If we already have the ID in the DB, we don't need to update it
             print(f'[Debug] ID found in keystore -- {playerName}:{playerID}')
@@ -206,7 +206,7 @@ def updatePlayerStatCache(playerNames, type, updateFlag=True):
     for playerName in playerNames:
 
         # First, construct a Player object to hold the data retrieved from the API
-        playerID = rd.get(playerName).decode('utf-8')
+        playerID = rd.get(playerName).decode("utf-8")
 
         if (type == 'batter'):
             player = Batter(name=playerName, id=playerID)
@@ -252,7 +252,7 @@ if __name__ == '__main__':
     players = updatePlayerStatCache(playerNameList, 'batter', updateFlag=True)
 
     print("vvvvvvvvvvvvvvvvvvvvvv")
-    print( f'Name: {rd.get(players[2].name).decode('utf-8')}' )
+    print( f'Name: {rd.get(players[2].name).decode("utf-8")}' )
     print("----------------------")
     print( f'Stats: {rd.lrange(players[2].id, 0, -1)}' )
     print("^^^^^^^^^^^^^^^^^^^^^^")
