@@ -51,10 +51,10 @@ def saveData():
         rd.rpush(player[0], player[2])  # Player team location
         rd.rpush(player[0], player[3])  # Player team nickname
         rd.rpush(player[0], player[4])  # Player team emoji
-        rd.rpush(player[0], player[5])  # Player stat BA
-        rd.rpush(player[0], player[6])  # Player stat H
-        rd.rpush(player[0], player[7])  # Player stat HR
-        rd.rpush(player[0], player[8])  # Player stat SB
+        rd.rpush(player[0], player[5]['batting_average'])  # Player stat BA
+        rd.rpush(player[0], player[5]['hits'])  # Player stat H
+        rd.rpush(player[0], player[5]['home_runs'])  # Player stat HR
+        rd.rpush(player[0], player[5]['stolen_bases'])  # Player stat SB
 
     print('________________')
     print( rd.lrange(player_ids[0], 0, -1) )
