@@ -39,10 +39,11 @@ def saveData():
     rd = redis.Redis(host=rd_host, port=rd_port, password=rd_pw)
 
 
-    player_ids = bst.getPlayerIDs(["Goodwin Morin", "York Silk", "Aldon Cashmoney"])
+    player_id_dict = bst.getPlayerIDs(["Goodwin Morin", "York Silk", "Aldon Cashmoney"])
 
-    player_list = bst.requestPlayerStatsFromAPI(player_ids, ['batting_average', 'hits', 'home_runs', 'stolen_bases'])
+    player_list = bst.requestPlayerStatsFromAPI(player_id_dict, ['batting_average', 'hits', 'home_runs', 'stolen_bases'])
 
+    player_ids = []
     for player in player_list:  # [(player id, player name, team location, team nickname, team emoji, {player stats dict}), ...]
 
         # Store player data with the player ID as the key.
@@ -55,6 +56,8 @@ def saveData():
         rd.rpush(player[0], player[5]['hits'])  # Player stat H
         rd.rpush(player[0], player[5]['home_runs'])  # Player stat HR
         rd.rpush(player[0], player[5]['stolen_bases'])  # Player stat SB
+
+        player_ids.append(player[0])
 
     print('________________')
     print( rd.lrange(player_ids[0], 0, -1) )
