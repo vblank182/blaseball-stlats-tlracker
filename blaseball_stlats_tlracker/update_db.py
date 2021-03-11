@@ -2,9 +2,12 @@
 # Jesse Williams 🎸
 # Requires Python >= 3.9
 
-# Redis endpoint anatomy:
+# Redis endpoint URI:
 #  [[scheme]]             [[userinfo user:pass (with user field blank)]]                                [[host]]                      [[port]]
 #    redis  ://  :p9xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxe7  @  ec0-00-000-000-000.compute-1.amazonaws.com  :  25xx9
+#
+# Redis value types:  bytes, string, int, float
+# Redis lists set and read using `rpush` and `lpop`/`lrange`
 
 import redis, os, re
 from urllib import parse
@@ -21,14 +24,18 @@ def saveData():
 
     rd = redis.Redis(host=rd_host, port=rd_port, password=rd_pw)
 
-    print(rd)
 
-    test_player_name = rd.set('foo1', 'bar')
-    test_player_stats = rd.set('foo2', ["0.333", "47", "36"])
-
-    g1 = rd.get('foo1')
-    g2 = rd.get('foo2')
+    rd.set('foo', 'bar')
+    g1 = rd.get('foo')
     print(g1)
-    print(g2)
+
+    rd.rpush('list', 'Goodwin Morin')  # Start a linked list
+    rd.rpush('list', 'Seattle Garages')
+    gl1 = rd.lrange('list', 0, -1)  # Get entire list
+    print(gl1)
+
+    rd.rpush('list', '0.333', '69', '42')
+    gl2 = rd.lrange('list', 0, -1)
+    print(gl2)
 
 saveData()
