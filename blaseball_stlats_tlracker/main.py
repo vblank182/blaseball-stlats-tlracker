@@ -215,7 +215,7 @@ def updatePlayerStatCache(playerNames, type, updateFlag=True):
 
         elif (type == 'pitcher'):
             player = Pitcher(name=playerName, id=playerID)
-            playerData = _requestPlayerStatsFromAPI(playerIDs, PITCHER_STATS, group='pitching')[0]
+            playerData = _requestPlayerStatsFromAPI(playerID, PITCHER_STATS, group='pitching')[0]
 
         else:
             print(f'[Error] Player type cannot be `{type}`.')
@@ -247,6 +247,36 @@ def updatePlayerStatCache(playerNames, type, updateFlag=True):
             rd.rpush(player.id, getattr(player, field))  # Player name
 
     return players
+
+def getPlayerStatsByName(playerName, type='batter'):
+    ##### WIP ###################################################
+    rd = _connectToRedis()
+    playerID = rd.get(playerName)         # Get player's ID
+    data = rd.lrange(playerID, 0, -1)     # Read player's data from DB
+
+    # Construct a player object with stats info
+    if (type == 'batter'):
+        player = Batter(name=playerName, id=playerID)
+        playerData = _requestPlayerStatsFromAPI(playerID, BATTER_STATS, group='hitting')[0]
+    elif (type == 'pitcher'):
+        player = Pitcher(name=playerName, id=playerID)
+        playerData = _requestPlayerStatsFromAPI(playerID, PITCHER_STATS, group='pitching')[0]
+    else:
+        print(f'[Error] Player type cannot be `{type}`.')
+        sys.exit(2)
+
+    # Set player team
+    ## TODO: Set more team data fields
+    teamData = playerData['team']
+    player.setTeam(teamData['location'], teamData['nickname'], team_emoji=teamData['team_emoji'])
+
+    # Set player stats dict
+    player.setStats(playerData['stat'])
+    ##### WIP ###################################################
+
+def getPlayerStatsById(playerID):
+    ##### WIP ###################################################
+    pass
 
 
 if __name__ == '__main__':

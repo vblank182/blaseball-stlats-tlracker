@@ -1,10 +1,29 @@
-{% extends 'base.html' %}
+{% extends 'base_bs.html' %}
 
 {% block head %}
 {% endblock %}
 
 {% block body %}
-    Hello world! <br />
-    Visits: {{ count }} <br /><br />
-    Data: {{ data['name'] }} has a BA of {{ data['ba'] }}.
+
+    <style>
+        .col {
+            color: $yellow-300;
+            background-color: $purple-400;
+        }
+    </style>
+
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                {{ data['name'] }}
+            </div>
+            <div class="col">
+                {{ data['team'] }}
+            </div>
+            <div class="col">
+                {{ data['ba'] }}
+            </div>
+        </div>
+    </div>
+
 {% endblock %}
