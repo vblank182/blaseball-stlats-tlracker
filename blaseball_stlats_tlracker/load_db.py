@@ -23,7 +23,9 @@ def saveData():
 
     # Get Redis location from Heroku env variable and parse URI
     rd_url = os.getenv("REDIS_URL")
-    rd_pw, rd_host = urllib.parse.urlparse(rd_url).netloc.split("@")
+    rd_pw, rd_hostport = urllib.parse.urlparse(rd_url).netloc.split("@")
+    rd_pw = rd_pw[1:]  # cut off leading :
+    rd_host = rd_hostport.split(":")[0]
     rd_port = urllib.parse.urlparse(rd_url).port
 
     print(f'{rd_url}  ==  {rd_host} : {rd_port} with {rd_pw}')
