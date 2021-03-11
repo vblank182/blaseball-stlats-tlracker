@@ -145,6 +145,7 @@ def _requestPlayerStatsFromAPI(playerIDs, fields, group='hitting', season='curre
 
     for playerID in playerIDs:
         rsp = requests.get(f'https://api.blaseball-reference.com/v2/stats?type=season&group={group}&fields={fieldsStr_URIencoded}&season={season}&gameType={gameType}&playerId={playerID}')
+        print(f'https://api.blaseball-reference.com/v2/stats?type=season&group={group}&fields={fieldsStr_URIencoded}&season={season}&gameType={gameType}&playerId={playerID}')
 
         global REQUESTS_MADE_API
         REQUESTS_MADE_API += 1
@@ -155,7 +156,7 @@ def _requestPlayerStatsFromAPI(playerIDs, fields, group='hitting', season='curre
 
         try:
             rsp_json = rsp.json()[0]['splits'][0]  # Read API response into a JSON list object
-            print(rsp.json()[0])
+            print(f'****| {rsp.json()[0]} |****')
         except IndexError:
             # If list is empty, we didn't get a proper response (likely a misspelling or missing DB entry)
             print(f'[Error] API failed.')
