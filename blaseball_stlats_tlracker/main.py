@@ -205,9 +205,10 @@ def updatePlayerStatCache(playerNames, type, updateFlag=True):
     # Update each player's data
     for playerName in playerNames:
 
-        # First, construct a Player object to hold the data retrieved from the API
+        # Get ID for this player
         playerID = rd.get(playerName).decode("utf-8")
 
+        # Construct a Player object to hold the data retrieved from the API
         if (type == 'batter'):
             player = Batter(name=playerName, id=playerID)
             playerData = _requestPlayerStatsFromAPI(playerID, BATTER_STATS, group='hitting')[0]
@@ -234,6 +235,11 @@ def updatePlayerStatCache(playerNames, type, updateFlag=True):
 
     # Store player data in Redis DB as a linked list with player ID as the key
     for player in players:
+
+        # If a DB entry for this player already exists, delete it first to overwrite with new data
+        if (rd.get(player.id) not None):
+            rd.delete(player.id)
+
         if (type == 'batter'): FIELDS = REDIS_BATTER_FIELDS
         elif (type == 'pitcher'): FIELDS = REDIS_PITCHER_FIELDS
 
@@ -253,7 +259,7 @@ if __name__ == '__main__':
     players = updatePlayerStatCache(playerNameList, 'batter', updateFlag=True)
 
     print("vvvvvvvvvvvvvvvvvvvvvv")
-    print( f'Name: {rd.get(players[2].name).decode("utf-8")}' )
+    print( f'ID: {rd.get(players[2].name).decode("utf-8")}' )
     print("----------------------")
     print( f'Stats: {rd.lrange(players[2].id, 0, -1)}' )
     print("^^^^^^^^^^^^^^^^^^^^^^")
