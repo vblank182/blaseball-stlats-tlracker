@@ -246,6 +246,7 @@ def updatePlayerStatCache(playerNames, type, updateFlag=True):
 if __name__ == '__main__':
 
     ## TEST
+    rd = _connectToRedis()
 
     playerNameList = ["Aldon Cashmoney", "York Silk", "Goodwin Morin", "Wyatt Glover", "Ren Hunter"]  ## TODO: pull from a file?
 
