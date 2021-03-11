@@ -30,11 +30,12 @@ def index():
     pid = rd.get("Ren Hunter")
     print( pid )
     print("~~~~~~~~~~~~~~~~~~~~~~~")
-    print( rd.lrange(pid, 0, -1) )
+    data = rd.lrange(pid, 0, -1)
+    print( data )
     print("%%%%%%%%  END  %%%%%%%%")
 
     # Render HTML with count variable
-    return render_template("index.html", data=data)
+    return render_template("index.html", data=[pid, data])
 
 if __name__ == "__main__":
     bst_frontend.run()

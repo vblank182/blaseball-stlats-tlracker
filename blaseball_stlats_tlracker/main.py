@@ -8,6 +8,7 @@
 
 import sys, os, re
 from urllib.parse import quote
+from time import sleep
 import requests
 import redis
 
@@ -148,7 +149,6 @@ def _requestPlayerStatsFromAPI(playerIDs, fields, group='hitting', season='curre
 
     for playerID in playerIDs:
         rsp = requests.get(f'https://api.blaseball-reference.com/v2/stats?type=season&group={group}&fields={fieldsStr_URIencoded}&season={season}&gameType={gameType}&playerId={playerID}')
-        print(f'https://api.blaseball-reference.com/v2/stats?type=season&group={group}&fields={fieldsStr_URIencoded}&season={season}&gameType={gameType}&playerId={playerID}')  ## TEST
 
         global REQUESTS_MADE_API
         REQUESTS_MADE_API += 1
@@ -251,17 +251,19 @@ def updatePlayerStatCache(playerNames, type, updateFlag=True):
 
 if __name__ == '__main__':
 
-    ## TEST
+    ## TEST ##
     rd = _connectToRedis()
 
     playerNameList = ["Aldon Cashmoney", "York Silk", "Goodwin Morin", "Wyatt Glover", "Ren Hunter"]  ## TODO: pull from a file?
 
     players = updatePlayerStatCache(playerNameList, 'batter', updateFlag=True)
 
-    print("vvvvvvvvvvvvvvvvvvvvvv")
-    print( f'ID: {rd.get(players[2].name).decode("utf-8")}' )
-    print("----------------------")
-    print( f'Stats: {rd.lrange(players[2].id, 0, -1)}' )
-    print("^^^^^^^^^^^^^^^^^^^^^^")
+    # print("vvvvvvvvvvvvvvvvvvvvvv")
+    # print( f'ID: {rd.get(players[2].name).decode("utf-8")}' )
+    # print("----------------------")
+    # print( f'Stats: {rd.lrange(players[2].id, 0, -1)}' )
+    # print("^^^^^^^^^^^^^^^^^^^^^^")
+    #
+    # print(f'[Debug] API requests made: {REQUESTS_MADE_API}')
 
-    print(f'[Debug] API requests made: {REQUESTS_MADE_API}')
+    sleep(5*60)
