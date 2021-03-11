@@ -2,6 +2,8 @@
 # Jesse Williams 🎸
 # Requires Python >= 3.9
 
+## TODO: Move cache for player IDs into Redis (from pickle file)
+
 import sys
 import os
 from urllib.parse import quote
@@ -78,8 +80,9 @@ def requestPlayerStatsFromAPI(playerIDs, fields, group='hitting', season='curren
             print(f'[Error] API failed.')
             sys.exit(1)
 
-        # Return structure: [(player_name, {stats}, team_nickname, team_emoji), ...]
-        stats_list.append( (rsp_json['player']['fullName'], rsp_json['stat'], rsp_json['team']['nickname'], rsp_json['team']['team_emoji']) )
+        # Return structure: [(player id, player name, team location, team nickname, team emoji, {player stats dict}), ...]
+        ## TODO: Either return entire response here, or move values directly into Redis DB from here
+        stats_list.append( (rsp_json['player']['id'], rsp_json['player']['fullName'], rsp_json['team']['location'], rsp_json['team']['nickname'], rsp_json['team']['team_emoji'], rsp_json['stat']) )
 
     return stats_list
 

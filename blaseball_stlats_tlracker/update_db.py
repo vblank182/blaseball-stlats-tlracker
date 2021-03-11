@@ -2,15 +2,29 @@
 # Jesse Williams 🎸
 # Requires Python >= 3.9
 
+###-#-#-#-#-###
+###  Redis  ###
+###-#-#-#-#-###
 # Redis endpoint URI:
 #  [[scheme]]             [[userinfo user:pass (with user field blank)]]                                [[host]]                      [[port]]
 #    redis  ://  :p9xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxe7  @  ec0-00-000-000-000.compute-1.amazonaws.com  :  25xx9
 #
-# Redis value types:  bytes, string, int, float
-# Redis lists set and read using `rpush` and `lpop`/`lrange`
+# << redis.py methods >>
+#
+#  set()/get(): Used to set/get a single key/value pair in the DB
+#  Ex:   rd.set('foo', 'bar')
+#        print( rd.get('foo') )
+#  Allowed value types:  bytes, string, int, float
+#
+#  rpush(): Used to start or continue a linked list by pushing a value on the right
+#  lpop(): Used to read a single value from the left of the list
+#  lrange(): Used to read a range of values from a list, or the entire list
+
 
 import redis, os, re
 from urllib import parse
+from time import sleep
+import main as bst
 
 def saveData():
     # Data:
@@ -25,17 +39,30 @@ def saveData():
     rd = redis.Redis(host=rd_host, port=rd_port, password=rd_pw)
 
 
-    rd.set('foo', 'bar')
-    g1 = rd.get('foo')
-    print(g1)
+    player_ids = bst.getPlayerIDs(["Goodwin Morin", "York Silk", "Aldon Cashmoney"])
 
-    rd.rpush('list', 'Goodwin Morin')  # Start a linked list
-    rd.rpush('list', 'Seattle Garages')
-    gl1 = rd.lrange('list', 0, -1)  # Get entire list
-    print(gl1)
+    player_list = bst.requestPlayerStatsFromAPI(player_ids, ['batting_average', 'hits', 'home_runs', 'stolen_bases'])
 
-    rd.rpush('list', '0.333', '69', '42')
-    gl2 = rd.lrange('list', 0, -1)
-    print(gl2)
+    for player in player_list:  # [(player id, player name, team location, team nickname, team emoji, {player stats dict}), ...]
+
+        # Store player data with the player ID as the key.
+        # List structure: [player name, team location, team nickname, team emoji, stat1, ..., statN]
+        rd.rpush(player[0], player[1])  # Player name
+        rd.rpush(player[0], player[2])  # Player team location
+        rd.rpush(player[0], player[3])  # Player team nickname
+        rd.rpush(player[0], player[4])  # Player team emoji
+        rd.rpush(player[0], player[5])  # Player stat BA
+        rd.rpush(player[0], player[6])  # Player stat H
+        rd.rpush(player[0], player[7])  # Player stat HR
+        rd.rpush(player[0], player[8])  # Player stat SB
+
+    print('________________')
+    print( rd.lrange(player_ids[0], 0, -1) )
+    print('________________')
+    print( rd.lrange(player_ids[1], 0, -1) )
+    print('________________')
+    print( rd.lrange(player_ids[2], 0, -1) )
+    print('^^^^^^^^^^^^^^^^')
 
 saveData()
+sleep(5*60)
