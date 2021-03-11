@@ -237,7 +237,7 @@ def updatePlayerStatCache(playerNames, type, updateFlag=True):
     for player in players:
 
         # If a DB entry for this player already exists, delete it first to overwrite with new data
-        if (rd.get(player.id) != None):
+        if (rd.exists(player.id) > 0):
             rd.delete(player.id)
 
         if (type == 'batter'): FIELDS = REDIS_BATTER_FIELDS
