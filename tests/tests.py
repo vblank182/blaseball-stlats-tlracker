@@ -1,7 +1,7 @@
-from blaseball_stlats_tlracker import BST as bst
+from blaseball_stlats_tlracker import Player
 import os
 
-p = bst.Player(name="Pitching Machine")
+p = Player(name="Pitching Machine")
 
 print(f'Name: {p.name}')
 
