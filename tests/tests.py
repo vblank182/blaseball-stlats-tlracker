@@ -1,7 +1,11 @@
 import blaseball_stlats_tlracker.main as bst
 import os
 
-print('All tests passed! :D')
+p = bst.Player(name="Pitching Machine")
+
+print(f'Name: {p.name}')
+
+print('\nAll tests passed! :D')
 
 # cwd = os.getcwd()
 # playerNameList = ["Goodwin Morin"]
