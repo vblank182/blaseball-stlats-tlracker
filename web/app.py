@@ -15,7 +15,7 @@ def _connectToRedis():
 
 def _getData(playerName):
     rd = _connectToRedis()
-    playerID = rd.get(playerName)                             # Get player ID by name lookup
+    playerID = rd.get(playerName)                               # Get player ID by name lookup
     playerDataBytes = rd.lrange(playerID, 0, -1)                # Get player data by ID lookup
     playerData = [b.decode("utf-8") for b in playerDataBytes]   # Convert data values into proper strings
     return playerData
@@ -37,7 +37,7 @@ def index():
         playerDatas.append(_getData(name))
 
     # Render HTML with count variable
-    return render_template("index.html", data=playerDatas)
+    return render_template("index.html", data={'name': playerDatas[0], 'team': f'{playerData[1]} {playerData[2]}', 'batting_average': playerData[14]})
 
 
 if __name__ == "__main__":

@@ -2,6 +2,7 @@
 # Jesse Williams 🎸
 
 ## TODO: Possibly need to convert all data pulled from Redis from a bytestring to a string
+## TODO: Move Player class and other helper functions into a python library accessible from both
 
 ## Notes
 # Values pulled from the Redis DB will be in raw byte string format and need to be converted with `.decode("utf-8")` before using as strings
