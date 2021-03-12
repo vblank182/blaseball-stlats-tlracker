@@ -6,5 +6,5 @@ blaseball_stlats_tlracker
 
 __version__ = "0.1"
 
-# from <.py file name> import <class name>
-from BST import BST
+# from .<python file name> import <class name>
+from .BST import Player
