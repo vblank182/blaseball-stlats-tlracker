@@ -1,9 +1,9 @@
-from blaseball_stlats_tlracker import BST as bst
+#from blaseball_stlats_tlracker import BST as bst
 import os
 
-p = bst.Player(name="Pitching Machine")
+#p = bst.Player(name="Pitching Machine")
 
-print(f'Name: {p.name}')
+#print(f'Name: {p.name}')
 
 print('\nAll tests passed! :D')
 

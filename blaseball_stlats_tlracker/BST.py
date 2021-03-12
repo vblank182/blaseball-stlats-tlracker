@@ -281,21 +281,23 @@ class BST:
         pass
 
 
-    if __name__ == '__main__':
 
-        ## TEST ##
-        rd = _connectToRedis()
 
-        playerNameList = ["Aldon Cashmoney", "York Silk", "Goodwin Morin", "Wyatt Glover", "Ren Hunter"]  ## TODO: pull from a file?
-
-        players = updatePlayerStatCache(playerNameList, 'batter', updateFlag=True)
-
-        # print("vvvvvvvvvvvvvvvvvvvvvv")
-        # print( f'ID: {rd.get(players[2].name).decode("utf-8")}' )
-        # print("----------------------")
-        # print( f'Stats: {rd.lrange(players[2].id, 0, -1)}' )
-        # print("^^^^^^^^^^^^^^^^^^^^^^")
-        #
-        # print(f'[Debug] API requests made: {REQUESTS_MADE_API}')
-
-        sleep(5*60)
+    # if __name__ == '__main__':
+    #
+    #     ## TEST ##
+    #     rd = _connectToRedis()
+    #
+    #     playerNameList = ["Aldon Cashmoney", "York Silk", "Goodwin Morin", "Wyatt Glover", "Ren Hunter"]  ## TODO: pull from a file?
+    #
+    #     players = updatePlayerStatCache(playerNameList, 'batter', updateFlag=True)
+    #
+    #     # print("vvvvvvvvvvvvvvvvvvvvvv")
+    #     # print( f'ID: {rd.get(players[2].name).decode("utf-8")}' )
+    #     # print("----------------------")
+    #     # print( f'Stats: {rd.lrange(players[2].id, 0, -1)}' )
+    #     # print("^^^^^^^^^^^^^^^^^^^^^^")
+    #     #
+    #     # print(f'[Debug] API requests made: {REQUESTS_MADE_API}')
+    #
+    #     sleep(5*60)
