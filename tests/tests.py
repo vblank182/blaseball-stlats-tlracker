@@ -1,4 +1,4 @@
-import blaseball_stlats_tlracker.main as bst
+from blaseball_stlats_tlracker import BST as bst
 import os
 
 p = bst.Player(name="Pitching Machine")

@@ -1,10 +1,7 @@
 import setuptools
 from sys import exit
 
-install_requires = [
-    'requests',
-    'urllib3',
-    ]
+install_requires = []  # dependencies satisfied through requirements.txt
 
 setuptools.setup(
     name='blaseball-stlats-tlracker',
