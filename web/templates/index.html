@@ -1,29 +1,57 @@
 {% extends 'base_bs.html' %}
 
 {% block head %}
-{% endblock head %}
 
-{% block body %}
+<title>Blaseball Stlats Tlracker</title>
 
+<!-- TEMP STYLE -->
 <style>
-    .col {
-        color: $yellow-300;
-        background-color: $purple-400;
+    body {
+        background-color: #696e71;
+    }
+    .stats_cont {
+        margin-top: 2rem;
+        border-radius: 6px;
+        background-color: #fbfff4;
+    }
+    .stats_table {
+    }
+    .team_emoji {
+        user-select: none;
     }
 </style>
 
-<div class="container">
-    <div class="row">
-        <div class="col">
-            {{ data['name'] }}
-        </div>
-        <div class="col">
-            {{ data['team'] }}
-        </div>
-        <div class="col">
-            {{ data['ba'] }}
-        </div>
-    </div>
+{% endblock head %}
+
+
+{% block body %}
+<div class="container stats_cont">
+    <table class="table table-striped table-hover stats_table">
+        <thead>
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">Name</th>
+                <th scope="col">Hits</th>
+                <th scope="col">HR</th>
+                <th scope="col">SB</th>
+                <th scope="col">BA</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            {% for player in data %}
+            <tr>
+                <th scope="row" class="team_emoji" title="{{ player['team_nickname'] }}">🎸</th>
+                <td>{{ player['name'] }}</td>
+                <td>{{ player['hits'] }}</td>
+                <td>{{ player['home_runs'] }}</td>
+                <td>{{ player['stolen_bases'] }}</td>
+                <td>{{ player['batting_average'] }}</td>
+            </tr>
+            {% endfor %}
+
+        </tbody>
+    </table>
 </div>
 
 {% endblock body %}

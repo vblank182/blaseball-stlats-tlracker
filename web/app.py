@@ -31,10 +31,13 @@ def index():
     ## TEST ##
     ## Data format:
     ##   [b'Ren Hunter', b'New York', b'Millennials', b'0x1F4F1', b'298', b'84', b'11', b'11', b'0', b'51', b'5', b'4', b'15', b'70', b'0.282', b'0.322', b'19', b'0.313', b'0.564', b'0.877', b'168', b'3', b'3', b'0', b'17', b'0']
-    playerData = _getData("Ren Hunter")
+    playerDatas = []
+    names = ["Aldon Cashmoney", "York Silk", "Goodwin Morin", "Wyatt Glover", "Ren Hunter"]
+    for name in names:
+        playerDatas.append(_getData(name))
 
     # Render HTML with count variable
-    return render_template("index.html", data={'name': playerData[0], 'team': f'{playerData[1]} {playerData[2]}', 'ba': playerData[14]})
+    return render_template("index.html", data=playerDatas)
 
 
 if __name__ == "__main__":
