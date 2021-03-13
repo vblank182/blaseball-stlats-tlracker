@@ -1,9 +1,9 @@
 import os
 from blaseball_stlats_tlracker import Player
 
-p = Player(name="Pitching Machine")
+#p = Player(name="Pitching Machine")
 
-print(f'Name: {p.name}')
+#print(f'Name: {p.name}')
 
 print('\nAll tests passed! :D')
 
