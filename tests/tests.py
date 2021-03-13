@@ -1,5 +1,5 @@
-from blaseball_stlats_tlracker import Player
 import os
+from blaseball_stlats_tlracker import Player
 
 p = Player(name="Pitching Machine")
 
