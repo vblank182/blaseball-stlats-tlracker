@@ -56,9 +56,9 @@ class Player():
 
         # Index these values directly from the REDIS list to make sure they keep the correct order
         parsedData['team'] = {
-            'location': data[REDIS_INFO_FIELDS.index(team_location)],
-            'nickname': data[REDIS_INFO_FIELDS.index(team_nickname)],
-            'team_emoji': data[REDIS_INFO_FIELDS.index(team_emoji)]
+            'location': data[Player.REDIS_INFO_FIELDS.index(team_location)],
+            'nickname': data[Player.REDIS_INFO_FIELDS.index(team_nickname)],
+            'team_emoji': data[Player.REDIS_INFO_FIELDS.index(team_emoji)]
         }
 
         # Set individual player stat attributes (depending on type)
@@ -66,11 +66,11 @@ class Player():
         stats = {}
         if (playerType == 'batter'):
             for statName in Player.BATTER_STATS:
-                stats[statName] = data[REDIS_BATTER_FIELD_ORD.index(statName)]
+                stats[statName] = data[Player.REDIS_BATTER_FIELD_ORD.index(statName)]
 
         elif (playerType == 'pitcher'):
             for statName in Player.PITCHER_STATS:
-                stats[statName] = data[REDIS_PITCHER_FIELD_ORD.index(statName)]
+                stats[statName] = data[Player.REDIS_PITCHER_FIELD_ORD.index(statName)]
         else:
             print(f'[Error] Player type cannot be `{playerType}`.')
             sys.exit(2)
