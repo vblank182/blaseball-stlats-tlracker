@@ -18,7 +18,7 @@ def index():
     ## TEST Render HTML
     return render_template(
         "index.html",
-        player=players[0]
+        players=players
     )
 
 
