@@ -41,12 +41,12 @@
 
             {% for player in data %}
             <tr>
-                <th scope="row" class="team_emoji" title="{{ player['team'] }}">🎸</th>
-                <td>{{ player['name'] }}</td>
-                <td>{{ player['hits'] }}</td>
-                <td>{{ player['home_runs'] }}</td>
-                <td>{{ player['stolen_bases'] }}</td>
-                <td>{{ player['batting_average'] }}</td>
+                <th scope="row" class="team_emoji" title="{{ player.team_location }} {{ player.team_nickname }}">🎸</th>
+                <td>{{ player.name }}</td>
+                <td>{{ player.hits }}</td>
+                <td>{{ player.home_runs }}</td>
+                <td>{{ player.stolen_bases }}</td>
+                <td>{{ player.batting_average }}</td>
             </tr>
             {% endfor %}
 
