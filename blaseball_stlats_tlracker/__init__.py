@@ -8,3 +8,4 @@ __version__ = "0.1"
 
 # from .<python file name> import <class name>
 from .BST import Player
+from .BST import getPlayerStatsByName
