@@ -14,11 +14,17 @@ from time import sleep
 import requests
 import redis
 
-## Global Variables #########################################################################################################################################
+
+########################
+##| Global Variables |##
+########################
 REQUESTS_MADE_API = 0
 REQUESTS_MADE_DB = 0
 
-#############################################################################################################################################################
+
+#########################
+##| Class Definitions |##
+#########################
 
 class Player():
     # Player stats fields to match API
@@ -33,21 +39,53 @@ class Player():
     'home_runs_per_9', 'walks_per_9', 'strikeouts_per_9', 'strikeouts_per_walk', 'hit_by_pitches', 'pitches_thrown']
     # Broken fields(?): 'strikeout_percentage', 'walk_percentage'
 
-    ########################################
-    #### MIGHT NOT NEED THIS ANYMORE??? ####
     # The Redis DB will store linked lists of player data with fields and ordering in this list
     # These names should correspond to the Player object attributes
     # Player stats are added to the end of the list, ordered according to BATTER_STATS/PITCHER_STATS
-    REDIS_BATTER_FIELD_ORD = ['name', 'team_location', 'team_nickname', 'team_emoji'] + BATTER_STATS
-    REDIS_PITCHER_FIELD_ORD = ['name', 'team_location', 'team_nickname', 'team_emoji'] + PITCHER_STATS
-    #                                       #
-    #########################################
+    REDIS_INFO_FIELDS = ['name', 'team_location', 'team_nickname', 'team_emoji']
+    REDIS_BATTER_FIELD_ORD = REDIS_INFO_FIELDS + BATTER_STATS
+    REDIS_PITCHER_FIELD_ORD = REDIS_INFO_FIELDS + PITCHER_STATS
+
+    @staticmethod
+    def parseCacheData(type, data):
+        parsedData = {}
+
+        # HACK: We don't need to worry about these because we don't need them for the 'data' part of the Player constructor
+        parsedData['season'] = ''  ## TODO: Include this in the DB?
+        parsedData['player'] = {'id': '', 'fullName': ''}
+
+        # Index these values directly from the REDIS list to make sure they keep the correct order
+        parsedData['team'] = {
+            'location': data[REDIS_INFO_FIELDS.index(team_location)],
+            'nickname': data[REDIS_INFO_FIELDS.index(team_nickname)],
+            'team_emoji': data[REDIS_INFO_FIELDS.index(team_emoji)]
+        }
+
+        # Set individual player stat attributes (depending on type)
+        # Index these values directly from the REDIS list to make sure they keep the correct order
+        stats = {}
+        if (type == 'batter'):
+            for statName in Player.BATTER_STATS:
+                stats[statName] = data[REDIS_BATTER_FIELD_ORD.index(statName)]
+
+        elif (type == 'pitcher'):
+            for statName in Player.PITCHER_STATS:
+                stats[statName] = data[REDIS_PITCHER_FIELD_ORD.index(statName)]
+        else:
+            print(f'[Error] Player type cannot be `{type}`.')
+            sys.exit(2)
+
+        parsedData['stat'] = stats
+
+        return parsedData
 
     def __init__(self, type, name, id, data):
         self.type = type    # Must be 'batter' or 'pitcher'
         self.name = name
         self.id = id
-        self.data = data    # The 'splits' json dict response from API
+        self.data = data
+        # The 'data' parameter should be formatted as the 'splits' json dict response from API:
+        #   { 'season':#, 'stat':{x:x}, 'player':{x:x}, 'team':{x:x} }
 
         # By constructing a Player object, we can manage the order of the data values
         #   within the class itself and allow for arbitrary attribute reads from the app side.
@@ -87,6 +125,11 @@ class Player():
         self.team_color2 = team_color2
         self.team_league = team_league
         self.team_division = team_division
+
+
+#########################
+##| Private Functions |##
+#########################
 
 def _createDirectory(dir):
     # Helper to set up directories
@@ -171,6 +214,46 @@ def _requestPlayerStatsFromAPI(playerIDs, fields, group='hitting', season='curre
 
     return stats_list
 
+
+def _updatePlayerIdCache(playerNames, redis_connection=None, force_update=False):
+    # Run this on player name lists before making stat requests
+    # Returns dict of player names to IDs which can be used immediately after calling for an update
+
+    # Check if we were passed an existing connection object. If not, create one.
+    if redis_connection == None: rd = connectToRedis()
+    else: rd = redis_connection
+
+    playerNameToIdDict = {}
+
+    # For each player, check if their ID already exists in the DB. If not, get it from the API.
+    for playerName in playerNames:
+        playerID = rd.get(playerName).decode("utf-8")  # Check DB for player name:id (returns None if no key exists)
+
+        if force_update:
+            # If we want to force an update, get data from the API and save to DB as (name:id) pairs
+            playerID = _requestPlayerIDsFromAPI(playerName)[playerName]  # this returns a dict so we need to get the value
+            rd.set(playerName, playerID)
+            print(f'[Debug] ID force-refreshed from API -- {playerName}:{playerID}')
+
+        else:
+            if playerID:
+                # If we already have the ID in the DB, we don't need to update it
+                print(f'[Debug] ID found in keystore -- {playerName}:{playerID}')
+            else:
+                # If we don't have the ID cached, get it from the API and save to DB as (name:id) pairs
+                playerID = _requestPlayerIDsFromAPI(playerName)[playerName]  # this returns a dict so we need to get the value
+                rd.set(playerName, playerID)
+                print(f'[Debug] ID not found in keystore, loaded from API -- {playerName}:{playerID}')
+
+        # Save the player name and ID to return
+        playerNameToIdDict[playerName] = playerID
+
+    return playerNameToIdDict
+
+########################
+##| Public Functions |##
+########################
+
 def connectToRedis():
     # Connects to Redis DB and returns a Redis object
 
@@ -182,81 +265,37 @@ def connectToRedis():
 
     return redis.Redis(host=rd_host, port=rd_port, password=rd_pw)
 
-
-def updatePlayerIdCache(playerNames, redis_connection=None):
-    # Run this on player name lists before making stat requests
-
-    # Check if we were passed an existing connection object. If not, create one.
-    if redis_connection == None: rd = connectToRedis()
-    else: rd = redis_connection
-
-    # For each player, check if their ID already exists in the DB. If not, get it from the API.
-    for playerName in playerNames:
-        playerID = rd.get(playerName).decode("utf-8")  # Check DB for player name:id (returns None if no key exists)
-        if playerID:
-            # If we already have the ID in the DB, we don't need to update it
-            print(f'[Debug] ID found in keystore -- {playerName}:{playerID}')
-        else:
-            # If we don't have the ID cached, get it from the API and save to DB as (name:id) pairs
-            playerID = _requestPlayerIDsFromAPI(playerName)[playerName]  # this returns a dict so we need to get the value
-            rd.set(playerName, playerID)
-            print(f'[Debug] ID not found in keystore, loaded from API -- {playerName}:{playerID}')
-
-
-def updatePlayerStatCache(playerNames, type, forceUpdate=True):
-    # Takes a list of player names, retrieves stats data from the API, then stores the new stats in the DB.
-    # Returns a list of the player objects
+def updatePlayerStatCache(playerNames, type):
+    # Takes a list of player names with a given type, checks for any missing names from the DB cache, retrieves them from the API, and stores them in the DB
+    # This function will be run periodically by a separate process in order to update the cache DB with fresh data
+    # Returns a list of populated player objects
     # Player type can be 'batter' or 'pitcher'
+    # This should be the only place we run `_requestPlayerStatsFromAPI`
 
-    ## TODO: Log timestamps of updates and prevent updates that happened within the same hour (since they won't change more often than that)
-
-    ## *REFACTOR*: This should probably act like a proper cache: Read from the DB if data is new (< 1 hr) and only request from API when needed,
-    ## * IDEA 1 *    then we should return the player data the same either way (hiding the details of where the data is coming from).
-    ##             Should possibly rename to "updatedPlayerStats" or something more generic to reflect this.
-
-
-    ###########################################################################################################################################################################
-    ## *REFACTOR*: Just combine both steps into this function:
-    ## * IDEA 2 *  (a) If cache is new enough, read from cache DB, then construct Player object with the data and return Player object
-    ##             (b) If cache is too old, read data from API, copy data into cache DB (resetting timer), then construct Player object with the data and return Player object
-    ##             This function will be exported and called by app.py. So app.py will provide a list of player names, and will recieve a list of Player objects with stats for those players.
-    ## (this one probably better) ((OR SHOULD WE JUST UPDATE THE DB PERIODICALLY AND NOT HERE??))
-
-    # If cache has not been updated
-    # If 45 < minutes < 55 and last update
-     the cache has been updated within the last 5 minutes
-
-    # Update player ID cache to make sure the required player IDs are in the DB
-    if forceUpdate or cacheOld: updatePlayerIdCache(playerNames)
-
-    rd = connectToRedis()
-
-    ###########################################################################################################################################################################
-    ###########################################################################################################################################################################
-
-
+    ## TODO: Log timestamps of updates to be referenced by the web app (to show time of last update)
     ## TODO: Make 'type' parameter a list of player types corresponding to their order in 'playerNames', or combine them into a tuple??
 
-    # Update player ID cache to make sure the required player IDs are in the DB
-    if updateFlag: updatePlayerIdCache(playerNames)
-
     rd = connectToRedis()
 
+    # Make sure player IDs are present in DB
+    playerNameToIdDict = _updatePlayerIdCache(playerNames, rd)
+
     players = []
+
     # Update each player's data
     for playerName in playerNames:
 
-        # Get ID for this player
-        playerID = rd.get(playerName).decode("utf-8")
+        # Get ID for this player (since we just ran an update, we can use the returned IDs)
+        playerID = playerNameToIdDict[playerName]
 
         # Construct a Player object to hold the data retrieved from the API
         if (type == 'batter'):
-            playerData = _requestPlayerStatsFromAPI(playerID, BATTER_STATS, group='hitting')[0]
-            player = Batter('batter', playerName, playerID, playerData)
+            playerData = _requestPlayerStatsFromAPI(playerID, Player.BATTER_STATS, group='hitting')[0]
+            player = Player(type, playerName, playerID, playerData)
 
         elif (type == 'pitcher'):
-            playerData = _requestPlayerStatsFromAPI(playerID, PITCHER_STATS, group='pitching')[0]
-            player = Pitcher('pitcher', playerName, playerID, playerData)
+            playerData = _requestPlayerStatsFromAPI(playerID, Player.PITCHER_STATS, group='pitching')[0]
+            player = Player(type, playerName, playerID, playerData)
 
         else:
             print(f'[Error] Player type cannot be `{type}`.')
@@ -273,82 +312,33 @@ def updatePlayerStatCache(playerNames, type, forceUpdate=True):
         if (rd.exists(player.id) > 0):
             rd.delete(player.id)
 
-        if (type == 'batter'): FIELDS = REDIS_BATTER_FIELDS
-        elif (type == 'pitcher'): FIELDS = REDIS_PITCHER_FIELDS
+        if (type == 'batter'): fields = Player.REDIS_BATTER_FIELD_ORD
+        elif (type == 'pitcher'): fields = Player.REDIS_PITCHER_FIELD_ORD
 
-        for field in FIELDS:
-            rd.rpush(player.id, getattr(player, field))  # Player name
+        for field in fields:
+            rd.rpush(player.id, getattr(player, field))
 
     return players
 
 
+def getPlayerStatsByName(playerNames, type):
+    # Used by the web app to request player objects containing cached player data
 
+    ## TODO: Make 'type' parameter a list of player types corresponding to their order in 'playerNames', or combine them into a tuple?
 
+    # If a single player ID was passed in, make it a list
+    if type(playerNames).__name__ == 'str': playerNames = [playerNames]
 
+    rd = connectToRedis()
 
+    # For each player, create a player object and populate with data from cache DB
+    players = []
+    for playerName in playerNames:
+        playerID = rd.get(playerName)               # Get player's ID
+        playerCacheData = rd.lrange(playerID, 0, -1)     # Read player's data from DB
 
+        # Parse the player data into the correct form to construct the player object
+        playerData = Player.parseCacheData(type, playerCacheData)
 
-
-
-
-
-## *REFACTOR*: This function could probably serve as the function for app.py to call.
-## * IDEA 1 *  This function could call `updatePlayerStatCache` forcing (or at least suggesting) an update,
-##               then construct a Player object using the resulting data, and return that Player object.
-##             If `updatePlayerStatCache` is meant to handle checking whether the data needs to be refreshed or can be read from cache,
-##               then this function should be meant to transfer that data (no matter where it came from) to the caller as a Player object.
-
-# def getPlayerStatsByName(playerName, type='batter'):
-#     ##### WIP ###################################################
-#     rd = connectToRedis()
-#     playerID = rd.get(playerName)         # Get player's ID
-#     data = rd.lrange(playerID, 0, -1)     # Read player's data from DB
-#
-#     # Construct a player object with stats info
-#     if (type == 'batter'):
-#         player = Batter(name=playerName, id=playerID)
-#         playerData = _requestPlayerStatsFromAPI(playerID, BATTER_STATS, group='hitting')[0]
-#     elif (type == 'pitcher'):
-#         player = Pitcher(name=playerName, id=playerID)
-#         playerData = _requestPlayerStatsFromAPI(playerID, PITCHER_STATS, group='pitching')[0]
-#     else:
-#         print(f'[Error] Player type cannot be `{type}`.')
-#         sys.exit(2)
-#
-#     # Set player team
-#     ## TODO: Set more team data fields
-#     teamData = playerData['team']
-#     player.setTeam(teamData['location'], teamData['nickname'], team_emoji=teamData['team_emoji'])
-#
-#     # Set player stats dict
-#     player.setStats(playerData['stat'])
-#     ##### WIP ###################################################
-#
-# def getPlayerStatsById(playerID):
-#     ##### WIP ###################################################
-#     pass
-
-
-
-
-
-
-
-# if __name__ == '__main__':
-#
-#     ## TEST ##
-#     rd = connectToRedis()
-#
-#     playerNameList = ["Aldon Cashmoney", "York Silk", "Goodwin Morin", "Wyatt Glover", "Ren Hunter"]  ## TODO: pull from a file?
-#
-#     players = updatePlayerStatCache(playerNameList, 'batter', updateFlag=True)
-#
-#     # print("vvvvvvvvvvvvvvvvvvvvvv")
-#     # print( f'ID: {rd.get(players[2].name).decode("utf-8")}' )
-#     # print("----------------------")
-#     # print( f'Stats: {rd.lrange(players[2].id, 0, -1)}' )
-#     # print("^^^^^^^^^^^^^^^^^^^^^^")
-#     #
-#     # print(f'[Debug] API requests made: {REQUESTS_MADE_API}')
-#
-#     sleep(5*60)
+        # Create the Player object
+        player = Player(type, playerName, playerID, playerData)
