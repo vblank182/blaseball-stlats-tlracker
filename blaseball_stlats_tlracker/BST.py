@@ -47,7 +47,7 @@ class Player():
     REDIS_PITCHER_FIELD_ORD = REDIS_INFO_FIELDS + PITCHER_STATS
 
     @staticmethod
-    def parseCacheData(type, data):
+    def parseCacheData(playerType, data):
         parsedData = {}
 
         # HACK: We don't need to worry about these because we don't need them for the 'data' part of the Player constructor
@@ -64,23 +64,23 @@ class Player():
         # Set individual player stat attributes (depending on type)
         # Index these values directly from the REDIS list to make sure they keep the correct order
         stats = {}
-        if (type == 'batter'):
+        if (playerType == 'batter'):
             for statName in Player.BATTER_STATS:
                 stats[statName] = data[REDIS_BATTER_FIELD_ORD.index(statName)]
 
-        elif (type == 'pitcher'):
+        elif (playerType == 'pitcher'):
             for statName in Player.PITCHER_STATS:
                 stats[statName] = data[REDIS_PITCHER_FIELD_ORD.index(statName)]
         else:
-            print(f'[Error] Player type cannot be `{type}`.')
+            print(f'[Error] Player type cannot be `{playerType}`.')
             sys.exit(2)
 
         parsedData['stat'] = stats
 
         return parsedData
 
-    def __init__(self, type, name, id, data):
-        self.type = type    # Must be 'batter' or 'pitcher'
+    def __init__(self, ptype, name, id, data):
+        self.ptype = ptype    # Must be 'batter' or 'pitcher'
         self.name = name
         self.id = id
         self.data = data
@@ -100,15 +100,15 @@ class Player():
         self.team_emoji = self.data['team']['team_emoji']
 
         # Set individual player stat attributes (depending on type)
-        if (type == 'batter'):
+        if (ptype == 'batter'):
             for statName in Player.BATTER_STATS:
                 setattr(self, statName, self.data['stat'][statName])
 
-        elif (type == 'pitcher'):
+        elif (ptype == 'pitcher'):
             for statName in Player.PITCHER_STATS:
                 setattr(self, statName, self.data['stat'][statName])
         else:
-            print(f'[Error] Player type cannot be `{type}`.')
+            print(f'[Error] Player type cannot be `{ptype}`.')
             sys.exit(2)
 
     def setName(self, name):
@@ -266,7 +266,7 @@ def connectToRedis():
 
     return redis.Redis(host=rd_host, port=rd_port, password=rd_pw)
 
-def updatePlayerStatCache(playerNames, type):
+def updatePlayerStatCache(playerNames, playerType):
     # Takes a list of player names with a given type, checks for any missing names from the DB cache, retrieves them from the API, and stores them in the DB
     # This function will be run periodically by a separate process in order to update the cache DB with fresh data
     # Returns a list of populated player objects (probably not needed, but just in case)
@@ -274,7 +274,7 @@ def updatePlayerStatCache(playerNames, type):
     # This should be the only place we run `_requestPlayerStatsFromAPI`
 
     ## TODO: Log timestamps of updates to be referenced by the web app (to show time of last update)
-    ## TODO: Make 'type' parameter a list of player types corresponding to their order in 'playerNames', or combine them into a tuple??
+    ## TODO: Make 'playerType' parameter a list of player types corresponding to their order in 'playerNames', or combine them into a tuple??
 
     rd = connectToRedis()
 
@@ -290,16 +290,16 @@ def updatePlayerStatCache(playerNames, type):
         playerID = playerNameToIdDict[playerName]
 
         # Construct a Player object to hold the data retrieved from the API
-        if (type == 'batter'):
+        if (playerType == 'batter'):
             playerData = _requestPlayerStatsFromAPI(playerID, Player.BATTER_STATS, group='hitting')[0]
-            player = Player(type, playerName, playerID, playerData)
+            player = Player(playerType, playerName, playerID, playerData)
 
-        elif (type == 'pitcher'):
+        elif (playerType == 'pitcher'):
             playerData = _requestPlayerStatsFromAPI(playerID, Player.PITCHER_STATS, group='pitching')[0]
-            player = Player(type, playerName, playerID, playerData)
+            player = Player(playerType, playerName, playerID, playerData)
 
         else:
-            print(f'[Error] Player type cannot be `{type}`.')
+            print(f'[Error] Player type cannot be `{playerType}`.')
             sys.exit(2)
 
         # Add player to list of player objects
@@ -313,8 +313,8 @@ def updatePlayerStatCache(playerNames, type):
         if (rd.exists(player.id) > 0):
             rd.delete(player.id)
 
-        if (type == 'batter'): fields = Player.REDIS_BATTER_FIELD_ORD
-        elif (type == 'pitcher'): fields = Player.REDIS_PITCHER_FIELD_ORD
+        if (playerType == 'batter'): fields = Player.REDIS_BATTER_FIELD_ORD
+        elif (playerType == 'pitcher'): fields = Player.REDIS_PITCHER_FIELD_ORD
 
         for field in fields:
             rd.rpush(player.id, getattr(player, field))
@@ -322,11 +322,11 @@ def updatePlayerStatCache(playerNames, type):
     return players
 
 
-def getPlayerStatsByName(playerNames, type):
+def getPlayerStatsByName(playerNames, playerType):
     # Used by the web app to request player objects containing cached player data
     # Returns a list of Player objects populated with data
 
-    ## TODO: Make 'type' parameter a list of player types corresponding to their order in 'playerNames', or combine them into a tuple?
+    ## TODO: Make 'playerType' parameter a list of player types corresponding to their order in 'playerNames', or combine them into a tuple?
 
     # If a single player ID was passed in, make it a list
     if type(playerNames).__name__ == 'str': playerNames = [playerNames]
@@ -340,10 +340,10 @@ def getPlayerStatsByName(playerNames, type):
         playerCacheData = rd.lrange(playerID, 0, -1)    # Get player's data using ID
 
         # Parse the player data into the correct form to construct the player object
-        playerData = Player.parseCacheData(type, playerCacheData)
+        playerData = Player.parseCacheData(playerType, playerCacheData)
 
         # Create the Player object
-        player = Player(type, playerName, playerID, playerData)
+        player = Player(playerType, playerName, playerID, playerData)
 
         players.append(player)
 
