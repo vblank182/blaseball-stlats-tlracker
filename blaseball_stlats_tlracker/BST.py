@@ -56,9 +56,9 @@ class Player():
 
         # Index these values directly from the REDIS list to make sure they keep the correct order
         parsedData['team'] = {
-            'location': data[Player.REDIS_INFO_FIELDS.index(team_location)],
-            'nickname': data[Player.REDIS_INFO_FIELDS.index(team_nickname)],
-            'team_emoji': data[Player.REDIS_INFO_FIELDS.index(team_emoji)]
+            'location': data[Player.REDIS_INFO_FIELDS.index('team_location')],
+            'nickname': data[Player.REDIS_INFO_FIELDS.index('team_nickname')],
+            'team_emoji': data[Player.REDIS_INFO_FIELDS.index('team_emoji')]
         }
 
         # Set individual player stat attributes (depending on type)
