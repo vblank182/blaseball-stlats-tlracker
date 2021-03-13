@@ -3,7 +3,7 @@
 
 ## TODO: Possibly need to convert all data pulled from Redis from a bytestring to a string
 ## TODO: Move Player class and other helper functions into a python library accessible from both
-## TODO: Add a logging system
+## TODO: Add a logging system, including API and DB request counts
 
 ## Notes
 # Values pulled from the Redis DB will be in raw byte string format and need to be converted with `.decode("utf-8")` before using as strings
@@ -255,6 +255,7 @@ def _updatePlayerIdCache(playerNames, redis_connection=None, force_update=False)
 ########################
 
 def connectToRedis():
+    ## TODO: Possibly should make this back into a private function if nothing uses it
     # Connects to Redis DB and returns a Redis object
 
     # Get Redis location URL from Heroku env variable
@@ -268,7 +269,7 @@ def connectToRedis():
 def updatePlayerStatCache(playerNames, type):
     # Takes a list of player names with a given type, checks for any missing names from the DB cache, retrieves them from the API, and stores them in the DB
     # This function will be run periodically by a separate process in order to update the cache DB with fresh data
-    # Returns a list of populated player objects
+    # Returns a list of populated player objects (probably not needed, but just in case)
     # Player type can be 'batter' or 'pitcher'
     # This should be the only place we run `_requestPlayerStatsFromAPI`
 
@@ -323,6 +324,7 @@ def updatePlayerStatCache(playerNames, type):
 
 def getPlayerStatsByName(playerNames, type):
     # Used by the web app to request player objects containing cached player data
+    # Returns a list of Player objects populated with data
 
     ## TODO: Make 'type' parameter a list of player types corresponding to their order in 'playerNames', or combine them into a tuple?
 
@@ -334,11 +336,15 @@ def getPlayerStatsByName(playerNames, type):
     # For each player, create a player object and populate with data from cache DB
     players = []
     for playerName in playerNames:
-        playerID = rd.get(playerName)               # Get player's ID
-        playerCacheData = rd.lrange(playerID, 0, -1)     # Read player's data from DB
+        playerID = rd.get(playerName)                   # Get player's ID using name
+        playerCacheData = rd.lrange(playerID, 0, -1)    # Get player's data using ID
 
         # Parse the player data into the correct form to construct the player object
         playerData = Player.parseCacheData(type, playerCacheData)
 
         # Create the Player object
         player = Player(type, playerName, playerID, playerData)
+
+        players.append(player)
+
+    return players
