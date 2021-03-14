@@ -56,22 +56,19 @@ def index():
         return_pickles = scaling['pickles'][item_counts['pickles']] * player.stolen_bases
 
         print(item_counts['hotdogs'])
-        print(item_counts['sunflowerseeds'])
-        print(item_counts['pickles'])
+        print(type(item_counts['hotdogs']))
+
+        print(scaling['hotdogs'])
+        print(type(scaling['hotdogs']))
 
         print(scaling['hotdogs'][item_counts['hotdogs']])
-        print(scaling['sunflowerseeds'][item_counts['sunflowerseeds']])
-        print(scaling['pickles'][item_counts['pickles']])
+        print(type(scaling['hotdogs'][item_counts['hotdogs']]))
 
         print(player.home_runs)
-        print(player.hits)
-        print(player.stolen_bases)
+        print(type(player.home_runs))
 
         print(return_hotdogs)
-        print(return_sunflowerseeds)
-        print(return_pickles)
-
-        print(player.multiplier)
+        print(type(return_hotdogs))
 
         print('=============================================================')
 
