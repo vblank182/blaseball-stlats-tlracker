@@ -51,10 +51,32 @@ def index():
 
     player_base_returns = {}
     for player in players:
-        player_base_returns[player.name] = (scaling['hotdogs'][item_counts['hotdogs']] * player.home_runs) + (scaling['sunflowerseeds'][item_counts['sunflowerseeds']] * player.hits) + (scaling['pickles'][item_counts['pickles']] * player.stolen_bases)
-    print(scaling)
-    print(players[0].multiplier)
-    print(player_base_returns[players[0].name])
+        return_hotdogs = scaling['hotdogs'][item_counts['hotdogs']] * player.home_runs
+        return_sunflowerseeds = scaling['sunflowerseeds'][item_counts['sunflowerseeds']] * player.hits
+        return_pickles = scaling['pickles'][item_counts['pickles']] * player.stolen_bases
+
+        print(item_counts['hotdogs'])
+        print(item_counts['sunflowerseeds'])
+        print(item_counts['pickles'])
+
+        print(scaling['hotdogs'][item_counts['hotdogs']])
+        print(scaling['sunflowerseeds'][item_counts['sunflowerseeds']])
+        print(scaling['pickles'][item_counts['pickles']])
+
+        print(player.home_runs)
+        print(player.hits)
+        print(player.stolen_bases)
+
+        print(return_hotdogs)
+        print(return_sunflowerseeds)
+        print(return_pickles)
+
+        print(player.multiplier)
+
+        print('=============================================================')
+
+        player_base_returns[player.name] = return_hotdogs + return_sunflowerseeds + return_pickles
+
 
     ## TEST Render HTML
     return render_template(
