@@ -51,9 +51,9 @@
                 <td>{{ player.stolen_bases }}</td>
                 <!-- <td>{{ player.batting_average }}</td> -->
 
-                {{ item_counts = {'hotdogs': 50, 'sunflowerseeds': 69, 'pickles': 99} }}
+                {% item_counts = {'hotdogs': 50, 'sunflowerseeds': 69, 'pickles': 99} %}
 
-                {{ player_base_return = (scaling['hotdogs'][item_counts['hotdogs']] * player.home_runs) + (scaling['sunflowerseeds'][item_counts['sunflowerseeds']] * player.hits) + (scaling['pickles'][item_counts['pickles']] * player.stolen_bases) }}
+                {% player_base_return = (scaling['hotdogs'][item_counts['hotdogs']] * player.home_runs) + (scaling['sunflowerseeds'][item_counts['sunflowerseeds']] * player.hits) + (scaling['pickles'][item_counts['pickles']] * player.stolen_bases) %}
 
                 {#  Payout this season #}
                 <td>{{ player.multiplier * player_base_return }}</td>
