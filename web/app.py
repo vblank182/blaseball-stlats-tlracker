@@ -12,13 +12,13 @@ def _getScaling():
         # Add an extra '0' to the start of the list to make item qtys align with indices
 
         # Hot Dogs
-        scaling['hotdogs'] = [0] + lines[0]
+        scaling['hotdogs'] = [0] + lines[0].strip().split(',')
 
         # Sunflower Seeds
-        scaling['sunflowerseeds'] = [0] + lines[1]
+        scaling['sunflowerseeds'] = [0] + lines[1].strip().split(',')
 
         # Pickles
-        scaling['pickles'] = [0] + lines[2]
+        scaling['pickles'] = [0] + lines[2].strip().split(',')
 
         ## TEST
         print(f"TEST: Hotdogs @ 25 = {scaling['hotdogs'][25]}")
