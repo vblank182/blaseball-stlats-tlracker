@@ -52,7 +52,9 @@ def index():
     player_base_returns = {}
     for player in players:
         player_base_returns[player.name] = (scaling['hotdogs'][item_counts['hotdogs']] * player.home_runs) + (scaling['sunflowerseeds'][item_counts['sunflowerseeds']] * player.hits) + (scaling['pickles'][item_counts['pickles']] * player.stolen_bases)
-
+    print(scaling)
+    print(players[0].multiplier)
+    print(player_base_returns[players[0].name])
 
     ## TEST Render HTML
     return render_template(
