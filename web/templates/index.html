@@ -34,7 +34,10 @@
                 <th scope="col">Hits</th>
                 <th scope="col">HR</th>
                 <th scope="col">SB</th>
-                <th scope="col">BA</th>
+                <!-- <th scope="col">BA</th> -->
+                <th scope="col">Payout this season</th>
+                <!-- ## TODO: <th scope="col">Payout last season</th>
+                <!-- ## TODO: <th scope="col">Payout per game</th> -->
             </tr>
         </thead>
         <tbody>
@@ -46,7 +49,14 @@
                 <td>{{ player.hits }}</td>
                 <td>{{ player.home_runs }}</td>
                 <td>{{ player.stolen_bases }}</td>
-                <td>{{ player.batting_average }}</td>
+                <!-- <td>{{ player.batting_average }}</td> -->
+
+                {{ item_counts = {'hotdogs': 50, 'sunflowerseeds': 69, 'pickles': 99} }}
+
+                {{ player_base_return = (scaling['hotdogs'][item_counts['hotdogs']] * player.home_runs) + (scaling['sunflowerseeds'][item_counts['sunflowerseeds']] * player.hits) + (scaling['pickles'][item_counts['pickles']] * player.stolen_bases) }}
+
+                {#  Payout this season #}
+                <td>{{ player.multiplier * player_base_return }}</td>
             </tr>
             {% endfor %}
 

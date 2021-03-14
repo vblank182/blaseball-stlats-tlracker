@@ -126,6 +126,9 @@ class Player():
         self.team_league = team_league
         self.team_division = team_division
 
+    def setMultiplier(self, multiplier):
+        self.multiplier = multiplier
+
 
 #########################
 ##| Private Functions |##
@@ -250,6 +253,20 @@ def _updatePlayerIdCache(playerNames, redis_connection=None, force_update=False)
 
     return playerNameToIdDict
 
+def _getMultiplier(playerName):
+    ## TODO: Replace this with a system for reading player multipliers from the API
+
+    players_with_2x_mult = ['York Silk']        # Super Idol
+    players_with_5x_mult = ['Wyatt Glover']     # Credit to the Team
+
+    if playerName in players_with_2x_mult:
+        return 2
+    elif playerName in players_with_5x_mult:
+        return 5
+    else:
+        return 1
+
+
 ########################
 ##| Public Functions |##
 ########################
@@ -338,12 +355,17 @@ def getPlayerStatsByName(playerNames, playerType):
     for playerName in playerNames:
         playerID = rd.get(playerName)                   # Get player's ID using name
         playerCacheData = rd.lrange(playerID, 0, -1)    # Get player's data using ID
+        playerCacheData = [s.decode("utf-8") for s in playerCacheData]  # Convert values to strings
 
         # Parse the player data into the correct form to construct the player object
         playerData = Player.parseCacheData(playerType, playerCacheData)
 
         # Create the Player object
         player = Player(playerType, playerName, playerID, playerData)
+
+        # Set player's coin multiplier
+        multiplier = _getMultiplier(playerName)
+        player.setMultiplier(multiplier)
 
         players.append(player)
 
