@@ -97,7 +97,11 @@ class Player():
         # Set player team
         self.team_location = self.data['team']['location']
         self.team_nickname = self.data['team']['nickname']
-        self.team_emoji = self.data['team']['team_emoji']
+
+        # Format emoji as an HTML code: &#xFFFFF;
+        emoji_hex = self.data['team']['team_emoji'][1:]  # Take off the '0' at the start of the string
+        self.team_emoji = "&#" + emoji_hex + ";"         # Construct full HTML unicode string
+
 
         # Set individual player stat attributes (depending on type)
         if (ptype == 'batter'):
