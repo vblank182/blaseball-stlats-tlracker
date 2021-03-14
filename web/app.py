@@ -43,14 +43,22 @@ bst_frontend = Flask(__name__)
 def index():
 
     names = ["Goodwin Morin", "Aldon Cashmoney", "York Silk", "Wyatt Glover", "Ren Hunter"]
-
     players = getPlayerStatsByName(names, 'batter')
+
+
+    scaling=_getScaling()
+    item_counts = {'hotdogs': 50, 'sunflowerseeds': 69, 'pickles': 99}
+
+    player_base_returns = {}
+    for player in players:
+        player_base_returns[player.name] = (scaling['hotdogs'][item_counts['hotdogs']] * player.home_runs) + (scaling['sunflowerseeds'][item_counts['sunflowerseeds']] * player.hits) + (scaling['pickles'][item_counts['pickles']] * player.stolen_bases)
+
 
     ## TEST Render HTML
     return render_template(
         "index.html",
         players=players,
-        scaling=_getScaling(),
+        player_base_returns=player_base_returns,
     )
 
 
