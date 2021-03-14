@@ -21,13 +21,13 @@ def _getScaling():
         scaling['pickles'] = [0] + lines[2]
 
         ## TEST
-        print(f'TEST: Hotdogs @ 25 = {scaling['hotdogs'][25]}')
-        print(f'TEST: Hotdogs @ 50 = {scaling['hotdogs'][50]}')
-        print(f'TEST: Pickles @ 17 = {scaling['pickles'][17]}')
-        print(f'TEST: Pickles @ 69 = {scaling['pickles'][69]}')
-        print(f'TEST: SS @ 0 = {scaling['sunflowerseeds'][0]}')
-        print(f'TEST: SS @ 1 = {scaling['sunflowerseeds'][1]}')
-        print(f'TEST: SS @ 99 = {scaling['sunflowerseeds'][99]}')
+        print(f"TEST: Hotdogs @ 25 = {scaling['hotdogs'][25]}")
+        print(f"TEST: Hotdogs @ 50 = {scaling['hotdogs'][50]}")
+        print(f"TEST: Pickles @ 17 = {scaling['pickles'][17]}")
+        print(f"TEST: Pickles @ 69 = {scaling['pickles'][69]}")
+        print(f"TEST: SS @ 0 = {scaling['sunflowerseeds'][0]}")
+        print(f"TEST: SS @ 1 = {scaling['sunflowerseeds'][1]}")
+        print(f"TEST: SS @ 99 = {scaling['sunflowerseeds'][99]}")
 
     return scaling
 
