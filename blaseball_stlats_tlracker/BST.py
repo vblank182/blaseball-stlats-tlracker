@@ -93,8 +93,8 @@ class Player():
         # That way, ordering can be kept consistent by the class and player attributes can still be
         #   accessed arbitrarily from outside without any knowledge of DB ordering.
 
+
         # Set player team
-        ## TODO: Set more team data fields
         self.team_location = self.data['team']['location']
         self.team_nickname = self.data['team']['nickname']
         self.team_emoji = self.data['team']['team_emoji']
@@ -102,11 +102,11 @@ class Player():
         # Set individual player stat attributes (depending on type)
         if (ptype == 'batter'):
             for statName in Player.BATTER_STATS:
-                setattr(self, statName, self.data['stat'][statName])
+                setattr(self, statName, float(self.data['stat'][statName]))
 
         elif (ptype == 'pitcher'):
             for statName in Player.PITCHER_STATS:
-                setattr(self, statName, self.data['stat'][statName])
+                setattr(self, statName, float(self.data['stat'][statName]))
         else:
             print(f'[Error] Player type cannot be `{ptype}`.')
             sys.exit(2)

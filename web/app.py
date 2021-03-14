@@ -55,23 +55,6 @@ def index():
         return_sunflowerseeds = scaling['sunflowerseeds'][item_counts['sunflowerseeds']] * player.hits
         return_pickles = scaling['pickles'][item_counts['pickles']] * player.stolen_bases
 
-        print(item_counts['hotdogs'])
-        print(type(item_counts['hotdogs']))
-
-        print(scaling['hotdogs'])
-        print(type(scaling['hotdogs']))
-
-        print(scaling['hotdogs'][item_counts['hotdogs']])
-        print(type(scaling['hotdogs'][item_counts['hotdogs']]))
-
-        print(player.home_runs)
-        print(type(player.home_runs))
-
-        print(return_hotdogs)
-        print(type(return_hotdogs))
-
-        print('=============================================================')
-
         player_base_returns[player.name] = return_hotdogs + return_sunflowerseeds + return_pickles
 
 
@@ -79,7 +62,7 @@ def index():
     return render_template(
         "index.html",
         players=players,
-        player_base_returns=player_base_returns,
+        player_base_returns=player_base_returns,  ## TODO: Format decimal numbers properly first
     )
 
 
