@@ -2,7 +2,6 @@
 # Jesse Williams 🎸
 
 from blaseball_stlats_tlracker import updatePlayerStatCache
-import os
 
 #try:
 # Read list of batter names from file

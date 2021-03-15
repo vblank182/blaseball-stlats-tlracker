@@ -209,10 +209,12 @@ def _requestPlayerStatsFromAPI(playerIDs, fields, group='hitting', season='curre
             sys.exit(1)
 
         try:
+            print(rsp.json())
+            print('==============================================================')
             rsp_json = rsp.json()[0]['splits'][0]  # Read API response into a JSON list object
-        except IndexError:
+        except IndexError as e:
             # If list is empty, we didn't get a proper response (likely a misspelling or missing DB entry)
-            print(f'[Error] API failed.')
+            print(f'[Error] API failed:\n{e}')
             sys.exit(1)
 
         # Return list of JSON "splits" response for each player, including player info, team, and stats
