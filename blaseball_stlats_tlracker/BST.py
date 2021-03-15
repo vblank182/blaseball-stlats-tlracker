@@ -373,6 +373,7 @@ def getPlayerStatsByName(playerNames, playerType):
         playerCacheData = [s.decode("utf-8") for s in playerCacheData]  # Convert values to strings
 
         # Parse the player data into the correct form to construct the player object
+        print(f'(376) For player {playerName},  playerCacheData: {playerCacheData}')  ## TEST
         playerData = Player.parseCacheData(playerType, playerCacheData)
 
         # Create the Player object
