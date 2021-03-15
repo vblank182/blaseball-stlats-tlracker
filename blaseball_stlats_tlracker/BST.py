@@ -233,11 +233,8 @@ def _updatePlayerIdCache(playerNames, redis_connection=None, force_update=False)
     playerNameToIdDict = {}
 
     # For each player, check if their ID already exists in the DB. If not, get it from the API.
-    print(playerNames)
-    print('===========================================')
     for playerName in playerNames:
-        print(f'ATTEMPTING NAME:  {playerName}') ## TEST
-        playerID = rd.get(playerName).decode("utf-8")  # Check DB for player name:id (returns None if no key exists)
+        playerID = rd.get(playerName)  # Check DB for player name:id (returns None if no key exists)
 
         if force_update:
             # If we want to force an update, get data from the API and save to DB as (name:id) pairs
@@ -248,6 +245,7 @@ def _updatePlayerIdCache(playerNames, redis_connection=None, force_update=False)
         else:
             if playerID:
                 # If we already have the ID in the DB, we don't need to update it
+                playerID = playerID.decode("utf-8")  # Convert the ID to a proper string
                 print(f'[Debug] ID found in keystore -- {playerName}:{playerID}')
             else:
                 # If we don't have the ID cached, get it from the API and save to DB as (name:id) pairs
