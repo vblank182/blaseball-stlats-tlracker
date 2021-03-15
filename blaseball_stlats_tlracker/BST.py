@@ -260,8 +260,8 @@ def _updatePlayerIdCache(playerNames, redis_connection=None, force_update=False)
 def _getMultiplier(playerName):
     ## TODO: Replace this with a system for reading player multipliers from the API
 
-    players_with_2x_mult = ['York Silk']        # Super Idol
-    players_with_5x_mult = ['Wyatt Glover']     # Credit to the Team
+    players_with_2x_mult = ['York Silk', 'Nagomi Mcdaniel']         # Super Idol
+    players_with_5x_mult = ['Wyatt Glover', 'Adalberto Tosser']     # Credit to the Team
 
     if playerName in players_with_2x_mult:
         return 2
