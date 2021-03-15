@@ -7,12 +7,12 @@ import os
 try:
     print(os.getcwd())
     # Read list of batter names from file
-    with open('../common/players_batters.txt') as f:
+    with open('/app/common/players_batters.txt') as f:
         batterNames = f.readlines()
         batterNames = [name.strip() for name in batterNames]
 
     # Read list of pitcher names from file
-    with open('../common/players_pitchers.txt') as f:
+    with open('/app/common/players_pitchers.txt') as f:
         pitcherNames = f.readlines()
         pitcherNames = [name.strip() for name in pitcherNames]
 
