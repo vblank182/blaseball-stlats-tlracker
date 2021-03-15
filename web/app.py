@@ -33,12 +33,24 @@ bst_frontend = Flask(__name__)
 @bst_frontend.route("/")
 def index():
 
-    names = ["Goodwin Morin", "Aldon Cashmoney", "York Silk", "Wyatt Glover", "Ren Hunter"]
+    # Read list of batter names from file
+    with open('../common/players_batters.txt') as f:
+        batterNames = f.readlines()
+        batterNames = [name.strip() for name in batterNames]
+
+    # Read list of pitcher names from file
+    with open('../common/players_pitchers.txt') as f:
+        pitcherNames = f.readlines()
+        pitcherNames = [name.strip() for name in pitcherNames]
+
+    ## TODO: Split into two pages, one for batters and one for pitchers
+    names = batterNames  ## TEST
+
     players = getPlayerStatsByName(names, 'batter')
 
 
     scaling=_getScaling()
-    item_counts = {'hotdogs': 50, 'sunflowerseeds': 69, 'pickles': 99}
+    item_counts = {'hotdogs': 1, 'sunflowerseeds': 1, 'pickles': 1}
 
     player_base_returns = {}
     for player in players:
