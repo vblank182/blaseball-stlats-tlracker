@@ -357,8 +357,18 @@ def getPlayerStatsByName(playerNames, playerType):
     # For each player, create a player object and populate with data from cache DB
     players = []
     for playerName in playerNames:
-        playerID = rd.get(playerName)                   # Get player's ID using name
-        playerCacheData = rd.lrange(playerID, 0, -1)    # Get player's data using ID
+        try:
+            playerID = rd.get(playerName)                   # Get player's ID using name
+        except:
+            print(f'[Error] Cannot find ID for player {playerName} in DB cache. Skipping player.')
+            continue
+
+        try:
+            playerCacheData = rd.lrange(playerID, 0, -1)    # Get player's data using ID
+        except:
+            print(f'[Error] Cannot find data for player {playerName} with ID {playerID} in DB cache. Skipping player.')
+            continue
+
         playerCacheData = [s.decode("utf-8") for s in playerCacheData]  # Convert values to strings
 
         # Parse the player data into the correct form to construct the player object
