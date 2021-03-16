@@ -69,7 +69,7 @@ def index():
     ## TEST Render HTML
     return render_template(
         "index.html",
-        players=players,
+        players=players_formatted,
         player_base_returns=player_base_returns,  ## TODO: Format decimal numbers properly first
     )
 
