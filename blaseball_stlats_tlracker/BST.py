@@ -217,10 +217,12 @@ def _requestPlayerStatsFromAPI(playerIDs, fields, group='hitting', season='curre
             # Check if we got an empty json response (successful API response, but no data)
             if rsp.json()[0]['splits'] == []:
                 print(f'[Error] No data returned from API for player with ID {playerID}. Skipping player. Error message:\n{e}')
+                stats_list.append(None)  # Return None for this player
+
             # If not, the API request must have returned an error
             else:
                 print(f'[Error] API request failed for player with ID {playerID}. Skipping player. Error message:\n{e}')
-
+                stats_list.append(None)  # Return None for this player
             continue  # Skip to next player
 
         # Return list of JSON "splits" response for each player, including player info, team, and stats
@@ -322,11 +324,15 @@ def updatePlayerStatCache(playerNames, playerType):
         # Construct a Player object to hold the data retrieved from the API
         if (playerType == 'batter'):
             playerData = _requestPlayerStatsFromAPI(playerID, Player.BATTER_STATS, group='hitting')[0]
-            player = Player(playerType, playerName, playerID, playerData)
+            if not playerData: continue  # If we got a None response, skip player
+
+            player = Player(playerType, playerName, playerID, playerData)  # Create player object
 
         elif (playerType == 'pitcher'):
             playerData = _requestPlayerStatsFromAPI(playerID, Player.PITCHER_STATS, group='pitching')[0]
-            player = Player(playerType, playerName, playerID, playerData)
+            if not playerData: continue  # If we got a None response, skip player
+
+            player = Player(playerType, playerName, playerID, playerData)  # Create player object
 
         else:
             print(f'[Error] Player type cannot be `{playerType}`.')
