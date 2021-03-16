@@ -52,10 +52,10 @@
                 <td>{{ player.hits }}</td>
                 <td>{{ player.home_runs }}</td>
                 <td>{{ player.stolen_bases }}</td>
+
+                {#  Payout this season #}
+                <td>{{ player.multiplier * player_base_returns[player.name] }}</td>
                 -->
-
-                <!-- <td>{{ player.batting_average }}</td> -->
-
 
                 <!-- HACK -->
                 <td>{{ player['name'] }}</td>
@@ -63,9 +63,8 @@
                 <td>{{ player['home_runs'] }}</td>
                 <td>{{ player['stolen_bases'] }}</td>
 
-
                 {#  Payout this season #}
-                <td>{{ player.multiplier * player_base_returns[player.name] }}</td>
+                <td>{{ player['multiplier'] * player_base_returns[player['name']] }}</td>
             </tr>
             {% endfor %}
 

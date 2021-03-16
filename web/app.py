@@ -64,7 +64,15 @@ def index():
     ## HACK: Format player data manually
     players_formatted = []
     for player in players:
-        players_formatted.append({'name': player.name, 'hits': int(player.hits), 'home_runs': int(player.home_runs), 'stolen_bases': int(player.stolen_bases)})
+        players_formatted.append(
+            {
+                'name': player.name,
+                'hits': int(player.hits),
+                'home_runs': int(player.home_runs),
+                'stolen_bases': int(player.stolen_bases),
+                'multiplier': int(player.multiplier)
+            }
+        )
 
     ## TEST Render HTML
     return render_template(
