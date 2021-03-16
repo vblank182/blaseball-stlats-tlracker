@@ -215,7 +215,7 @@ def _requestPlayerStatsFromAPI(playerIDs, fields, group='hitting', season='curre
             #   or we got an empty response (likely because the player doesn't have any data for the selected season).
 
             # Check if we got an empty json response (successful API response, but no data)
-            if rsp.json()[0]['splits'] == []
+            if rsp.json()[0]['splits'] == []:
                 print(f'[Error] No data returned from API for player with ID {playerID}. Skipping player. Error message:\n{e}')
             # If not, the API request must have returned an error
             else:
