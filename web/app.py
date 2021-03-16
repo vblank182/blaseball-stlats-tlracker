@@ -60,7 +60,11 @@ def index():
 
         player_base_returns[player.name] = round(return_hotdogs + return_sunflowerseeds + return_pickles)
 
-        print(player.team_emoji)  ## TEST
+
+    ## HACK: Format player data manually
+    players_formatted = []
+    for player in players:
+        players_formatted.append({'name': player.name, 'hits': int(player.hits), 'home_runs': int(player.home_runs), 'stolen_bases': int(player.stolen_bases)})
 
     ## TEST Render HTML
     return render_template(
