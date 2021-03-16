@@ -209,13 +209,19 @@ def _requestPlayerStatsFromAPI(playerIDs, fields, group='hitting', season='curre
             sys.exit(1)
 
         try:
-            print(rsp.json())
-            print('==============================================================')
             rsp_json = rsp.json()[0]['splits'][0]  # Read API response into a JSON list object
         except IndexError as e:
-            # If list is empty, we didn't get a proper response (likely a misspelling or missing DB entry)
-            print(f'[Error] API failed:\n{e}')
-            sys.exit(1)
+            # If list is empty, either we didn't get a proper response (likely a misspelling or missing DB entry),
+            #   or we got an empty response (likely because the player doesn't have any data for the selected season).
+
+            # Check if we got an empty json response (successful API response, but no data)
+            if rsp.json()[0]['splits'] == []
+                print(f'[Error] No data returned from API for player with ID {playerID}. Skipping player. Error message:\n{e}')
+            # If not, the API request must have returned an error
+            else:
+                print(f'[Error] API request failed for player with ID {playerID}. Skipping player. Error message:\n{e}')
+
+            continue  # Skip to next player
 
         # Return list of JSON "splits" response for each player, including player info, team, and stats
         # Available keys: 'season', 'stat' (dict), 'player', 'team'
