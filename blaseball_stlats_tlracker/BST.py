@@ -98,18 +98,26 @@ class Player():
         self.team_location = self.data['team']['location']
         self.team_nickname = self.data['team']['nickname']
 
-        # Format emoji as an HTML code: &#xFFFFF;
-        emoji_hex = self.data['team']['team_emoji']
+        # # Format emoji as an HTML code: &#xFFFFF;
+        # emoji_hex = self.data['team']['team_emoji']
+        #
+        # ## HACK: If we get a bytestring here, we must be receiving the data from the cache.
+        # #        This means the emoji is already HTML formatted and we just need to convert it to a string.
+        # if type(emoji_hex).__name__ == 'bytes':
+        #     self.team_emoji = emoji_hex.decode('utf-8')
+        # # IF we just get a regular string, assume we got an API response which should be formatted as "0xFFFFF"
+        # else:
+        #     emoji_hex = emoji_hex[1:]                   # Take off the '0' at the start of the string
+        #     self.team_emoji = "&#" + emoji_hex + ";"    # Construct full HTML unicode string
 
-        ## HACK: If we get a bytestring here, we must be receiving the data from the cache.
-        #        This means the emoji is already HTML formatted and we just need to convert it to a string.
-        if type(emoji_hex).__name__ == 'bytes':
-            self.team_emoji = emoji_hex.decode('utf-8')
-        # IF we just get a regular string, assume we got an API response which should be formatted as "0xFFFFF"
-        else:
-            emoji_hex = emoji_hex[1:]                   # Take off the '0' at the start of the string
-            self.team_emoji = "&#" + emoji_hex + ";"    # Construct full HTML unicode string
-
+        ## HACK: Emoji is too hard 😅. Just grab the right one from the list.
+        team_emojis = {
+            'Firefighters': '🔥', 'Georgias': '🔱', 'Jazz Hands': '👐', 'Lift': '🏋️‍♀️', 'Tigers': '🐅', 'Wild Wings': '🍗',
+            'Garages': '🎸', 'Lovers': '💋', 'Mechanics': '🛠', 'Millenials': '📱', 'Pies': '🥧', 'Steaks': '🥩',
+            'Breath Mints': '🍬', 'Crabs': '🦀', 'Fridays': '🏝', 'Magic': '✨', 'Moist Talkers': '🗣', 'Shoe Thieves': '👟',
+            'Dale': '🚤', 'Flowers': '🌹', 'Spies': '🕵', 'Sunbeams': '🌞', 'Tacos': '🌮', 'Worms': '🐌',
+            }
+        self.team_emoji = team_emojis[self.team_nickname]
 
         # Set individual player stat attributes (depending on type)
         if (ptype == 'batter'):
