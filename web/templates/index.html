@@ -47,9 +47,9 @@
                 <!-- TODO: Now that we're on Bootstrap 4.6, make these tooltips again -->
                 <th scope="row" class="team_emoji" title="{{ player.team_location }} {{ player.team_nickname }}">{{ player.team_emoji|safe }}</th>
                 <td>{{ player.name }}</td>
-                <td>{{ player.hits }}</td>
-                <td>{{ player.home_runs }}</td>
-                <td>{{ player.stolen_bases }}</td>
+                <td>{{ round(player.hits) }}</td>
+                <td>{{ round(player.home_runs) }}</td>
+                <td>{{ round(player.stolen_bases) }}</td>
                 <!-- <td>{{ player.batting_average }}</td> -->
 
                 {#  Payout this season #}
