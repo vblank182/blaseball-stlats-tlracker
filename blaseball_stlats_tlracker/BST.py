@@ -113,7 +113,7 @@ class Player():
         ## HACK: Emoji is too hard 😅. Just grab the right one from the list.
         team_emojis = {
             'Firefighters': '🔥', 'Georgias': '🔱', 'Jazz Hands': '👐', 'Lift': '🏋️‍♀️', 'Tigers': '🐅', 'Wild Wings': '🍗',
-            'Garages': '🎸', 'Lovers': '💋', 'Mechanics': '🛠', 'Millenials': '📱', 'Pies': '🥧', 'Steaks': '🥩',
+            'Garages': '🎸', 'Lovers': '💋', 'Mechanics': '🛠', 'Millennials': '📱', 'Pies': '🥧', 'Steaks': '🥩',
             'Breath Mints': '🍬', 'Crabs': '🦀', 'Fridays': '🏝', 'Magic': '✨', 'Moist Talkers': '🗣', 'Shoe Thieves': '👟',
             'Dale': '🚤', 'Flowers': '🌹', 'Spies': '🕵', 'Sunbeams': '🌞', 'Tacos': '🌮', 'Worms': '🐌',
             }
