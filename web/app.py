@@ -67,6 +67,9 @@ def index():
         players_formatted.append(
             {
                 'name': player.name,
+                'team_location': player.team_location,
+                'team_nickname': player.team_nickname,
+                'team_emoji': player.team_emoji,
                 'hits': int(player.hits),
                 'home_runs': int(player.home_runs),
                 'stolen_bases': int(player.stolen_bases),
