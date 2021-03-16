@@ -44,7 +44,7 @@ def index():
         pitcherNames = [name.strip() for name in pitcherNames]
 
     ## TODO: Split into two pages, one for batters and one for pitchers
-    names = batterNames  ## TEST
+    names = batterNames  ## TEMP
 
     players = getPlayerStatsByName(names, 'batter')
 
@@ -60,7 +60,7 @@ def index():
 
         player_base_returns[player.name] = round(return_hotdogs + return_sunflowerseeds + return_pickles)
 
-
+        print(player.team_emoji)
     ## TEST Render HTML
     return render_template(
         "index.html",
