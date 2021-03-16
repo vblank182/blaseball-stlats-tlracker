@@ -98,9 +98,10 @@ class Player():
         self.team_location = self.data['team']['location']
         self.team_nickname = self.data['team']['nickname']
 
-        # Format emoji as an HTML code: &#xFFFFF;
-        emoji_hex = self.data['team']['team_emoji'][1:]  # Take off the '0' at the start of the string
-        self.team_emoji = "&#" + emoji_hex + ";"         # Construct full HTML unicode string
+        # Format emoji as an HTML code: "&#xFFFFF;" (API returns "0xFFFFF")
+        emoji_hex = self.data['team']['team_emoji'].decode('utf-8')     # Extract and convert emoji hex value to a string
+        emoji_hex = emoji_hex[1:]                                       # Take off the '0' at the start of the string
+        self.team_emoji = "&#" + emoji_hex + ";"                        # Construct full HTML unicode string
 
 
         # Set individual player stat attributes (depending on type)
@@ -387,7 +388,7 @@ def getPlayerStatsByName(playerNames, playerType):
         playerCacheData = [s.decode("utf-8") for s in playerCacheData]  # Convert values to strings
 
         # Parse the player data into the correct form to construct the player object
-        print(f'(376) For player {playerName},  playerCacheData: {playerCacheData}')  ## TEST
+        print(f'[Debug] For player {playerName},  playerCacheData: {playerCacheData}')  ## TEST
         playerData = Player.parseCacheData(playerType, playerCacheData)
 
         # Create the Player object

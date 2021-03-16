@@ -60,7 +60,8 @@ def index():
 
         player_base_returns[player.name] = round(return_hotdogs + return_sunflowerseeds + return_pickles)
 
-        print(player.team_emoji)
+        print(player.team_emoji)  ## TEST
+
     ## TEST Render HTML
     return render_template(
         "index.html",
