@@ -1,6 +1,8 @@
 # Blaseball Stlats Tlracker - Cache update
 # Jesse Williams 🎸
 
+# To run manually from command prompt, use `heroku run -a blaseball-stlats-tlracker python blaseball_stlats_tlracker/update_cache.py`
+
 from blaseball_stlats_tlracker import updatePlayerStatCache
 
 #try:

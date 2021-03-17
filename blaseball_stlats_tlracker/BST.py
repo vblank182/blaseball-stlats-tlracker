@@ -389,13 +389,13 @@ def getPlayerStatsByName(playerNames, playerType):
     players = []
     for playerName in playerNames:
         try:
-            playerID = rd.get(playerName)                   # Get player's ID using name
+            playerID = rd.get(playerName)  # Get player's ID using name
         except:
             print(f'[Error] Cannot find ID for player {playerName} in DB cache. Skipping player.')
             continue
 
         try:
-            playerCacheData = rd.lrange(playerID, 0, -1)    # Get player's data using ID
+            playerCacheData = rd.lrange(playerID, 0, -1)  # Get player's data using ID
         except:
             print(f'[Error] Cannot find data for player {playerName} with ID {playerID} in DB cache. Skipping player.')
             continue
