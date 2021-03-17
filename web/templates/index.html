@@ -73,7 +73,7 @@
                 <td>{{ player['stolen_bases'] }}</td>
 
                 {#  Payout this season #}
-                <td>{{ player['multiplier'] * player_base_returns[player['name']] }}</td>
+                <td><img src="img/coin.png" style="width:30px;height:30px;"> {{ player['multiplier'] * player_base_returns[player['name']] }}</td>
 
             </tr>
             {% endfor %}
