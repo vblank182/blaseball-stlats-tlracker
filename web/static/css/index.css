@@ -1,8 +1,18 @@
+/*** Bootstrap overrides ***/
+
+.table td, .table th {
+    padding: 0.5rem;
+}
+
+/***************************/
+
 body {
     background-color: #696e71;
 }
 
 .stats_cont {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
     margin-top: 2rem;
     border-radius: 6px;
     background-color: #fbfff4;

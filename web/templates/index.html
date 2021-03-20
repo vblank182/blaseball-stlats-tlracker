@@ -29,9 +29,9 @@
 
             {% for player in players %}
             <tr>
-                <!-- TODO: Now that we're on Bootstrap 4.6, make these tooltips again -->
-
-                <th scope="row" class="team_emoji" data-toggle="tooltip" data-placement="top" title="{{ player.team_location }} {{ player.team_nickname }}">{{ player.team_emoji }}</th>
+                <th scope="row">
+                    <span class="team_emoji" data-toggle="tooltip" data-placement="top" title="{{ player.team_location }} {{ player.team_nickname }}">{{ player.team_emoji }}</span>
+                </th>
 
                 <td>{{ player.name }}</td>
                 <td>{{ player.hits }}</td>
