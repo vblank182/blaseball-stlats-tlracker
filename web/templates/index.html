@@ -54,7 +54,7 @@
                 <td>{{ player.stolen_bases }}</td>
 
                 {#  Payout this season #}
-                <td><img src="/app/web/img/coin.png" style="width:25px;height:25px;"> {{ player.multiplier * player_base_returns[player.name] }}</td>
+                <td><img src="{{ url_for('static', filename='coin.png') }}" style="width:25px;height:25px;"> {{ player.multiplier * player_base_returns[player.name] }}</td>
 
             </tr>
             {% endfor %}

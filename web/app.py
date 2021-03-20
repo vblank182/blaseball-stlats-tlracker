@@ -28,7 +28,7 @@ def _getScaling():
 #############
 ##| Flask |##
 #############
-bst_frontend = Flask(__name__, static_url_path='/app/web/static')
+bst_frontend = Flask(__name__)
 bst_frontend.config['APPLICATION_ROOT'] = '/app/web'  # Set root of webserver
 
 
