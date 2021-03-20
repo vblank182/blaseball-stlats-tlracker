@@ -131,14 +131,14 @@ class Player():
         # Set individual player stat attributes (depending on player type and data type)
         if (ptype == 'batter'):
             for statName in Player.BATTER_STATS:
-                if statName in BATTER_STAT_FLOATS:
+                if statName in Player.BATTER_STAT_FLOATS:
                     setattr(self, statName, float(self.data['stat'][statName]))
                 else:
                     setattr(self, statName, int(self.data['stat'][statName]))
 
         elif (ptype == 'pitcher'):
             for statName in Player.PITCHER_STATS:
-                if statName in PITCHER_STAT_FLOATS:
+                if statName in Player.PITCHER_STAT_FLOATS:
                     setattr(self, statName, float(self.data['stat'][statName]))
                 else:
                     setattr(self, statName, int(self.data['stat'][statName]))
