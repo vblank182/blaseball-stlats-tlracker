@@ -134,14 +134,14 @@ class Player():
                 if statName in Player.BATTER_STAT_FLOATS:
                     setattr(self, statName, float(self.data['stat'][statName]))
                 else:
-                    setattr(self, statName, int(self.data['stat'][statName]))
+                    setattr(self, statName, round(float(self.data['stat'][statName])))
 
         elif (ptype == 'pitcher'):
             for statName in Player.PITCHER_STATS:
                 if statName in Player.PITCHER_STAT_FLOATS:
                     setattr(self, statName, float(self.data['stat'][statName]))
                 else:
-                    setattr(self, statName, int(self.data['stat'][statName]))
+                    setattr(self, statName, round(float(self.data['stat'][statName])))
         else:
             print(f'[Error] Player type cannot be `{ptype}`.')
             sys.exit(2)
