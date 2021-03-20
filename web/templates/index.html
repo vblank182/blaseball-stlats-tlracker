@@ -4,22 +4,7 @@
 
 <title>Blaseball Stlats Tlracker</title>
 
-<!-- TEMP STYLE -->
-<style>
-    body {
-        background-color: #696e71;
-    }
-    .stats_cont {
-        margin-top: 2rem;
-        border-radius: 6px;
-        background-color: #fbfff4;
-    }
-    .stats_table {
-    }
-    .team_emoji {
-        user-select: none;
-    }
-</style>
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static', filename='css/index.css') }}">
 
 {% endblock head %}
 
@@ -54,7 +39,7 @@
                 <td>{{ player.stolen_bases }}</td>
 
                 {#  Payout this season #}
-                <td><img src="{{ url_for('static', filename='coin.png') }}" style="width:25px;height:25px;"> {{ player.multiplier * player_base_returns[player.name] }}</td>
+                <td><img id="coin_img" src="{{ url_for('static', filename='img/coin.png') }}"> {{ player.multiplier * player_base_returns[player.name] }}</td>
 
             </tr>
             {% endfor %}

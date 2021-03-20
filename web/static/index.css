@@ -1,0 +1,21 @@
+body {
+    background-color: #696e71;
+}
+
+.stats_cont {
+    margin-top: 2rem;
+    border-radius: 6px;
+    background-color: #fbfff4;
+}
+
+.stats_table {
+}
+
+.team_emoji {
+    user-select: none;
+}
+
+#coin_img {
+    width: 6%;
+    margin-bottom: 0.2rem;
+}
