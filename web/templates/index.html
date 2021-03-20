@@ -46,35 +46,15 @@
             <tr>
                 <!-- TODO: Now that we're on Bootstrap 4.6, make these tooltips again -->
 
-                <!--
-                <th scope="row" class="team_emoji" title="{{ player.team_location }} {{ player.team_nickname }}">{{ player.team_emoji }}</th>
-                -->
+                <th scope="row" class="team_emoji" data-toggle="tooltip" data-placement="top" title="{{ player.team_location }} {{ player.team_nickname }}">{{ player.team_emoji }}</th>
 
-                <!--
                 <td>{{ player.name }}</td>
                 <td>{{ player.hits }}</td>
                 <td>{{ player.home_runs }}</td>
                 <td>{{ player.stolen_bases }}</td>
 
                 {#  Payout this season #}
-                <td>{{ player.multiplier * player_base_returns[player.name] }}</td>
-                -->
-
-
-
-                <!-- HACK -->
-
-                <th scope="row" class="team_emoji" data-toggle="tooltip" data-placement="top" title="{{ player['team_location'] }} {{ player['team_nickname'] }}">{{ player['team_emoji'] }}</th>
-
-
-                <td>{{ player['name'] }}</td>
-                <td>{{ player['hits'] }}</td>
-                <td>{{ player['home_runs'] }}</td>
-                <td>{{ player['stolen_bases'] }}</td>
-
-                {#  Payout this season #}
-                <!-- <td><img src="img/coin.png" style="width:25px;height:25px;"> {{ player['multiplier'] * player_base_returns[player['name']] }}</td> -->
-                <td>{{ player['multiplier'] * player_base_returns[player['name']] }}</td>
+                <td><img src="/app/web/img/coin.png" style="width:25px;height:25px;"> {{ player.multiplier * player_base_returns[player.name] }}</td>
 
             </tr>
             {% endfor %}
@@ -83,10 +63,11 @@
     </table>
 </div>
 
-<!-- <script type="text/javascript">
-$(function () {
-    $('[data-toggle="tooltip"]').tooltip()
-})
-</script> -->
+<script>
+// Initialize all tooltips
+$(document).ready(function(){
+  $('[data-toggle="tooltip"]').tooltip();
+});
+</script>
 
 {% endblock body %}
