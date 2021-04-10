@@ -18,13 +18,17 @@ with open('/app/common/players_pitchers.txt') as f:
 
 # Update batters
 if len(batterNames) > 0:
+    print('[Debug] Updating player data for batters.')
     updatePlayerStatCache(batterNames, 'batter')
+    print('[Debug] Finished updating player data for batters.')
 
 # Update pitchers
 if len(pitcherNames) > 0:
+    print('[Debug] Updating player data for pitchers.')
     updatePlayerStatCache(pitcherNames, 'pitcher')
+    print('[Debug] Finished updating player data for pitchers.')
 
-    print('[Debug] Successfully updated player stat cache.')
+print('[Debug] Successfully updated player stat cache.')
 
 #except:
 #    print('[Error] Could not update player stat cache.')
