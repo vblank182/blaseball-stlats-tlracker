@@ -9,7 +9,7 @@ def _getScaling():
     with open('item_scaling.txt', 'r') as f:
         lines = f.readlines()
 
-        # Add an extra '0' to the start of the list to make item qtys align with indices
+        # We add an extra '0' to the start of the list to make item qtys align with indices
 
         # Hot Dogs
         scaling['hotdogs'] = ['0'] + lines[0].strip().split(',')
@@ -29,7 +29,7 @@ def _getScaling():
 ##| Flask |##
 #############
 bst_frontend = Flask(__name__)
-bst_frontend.config['APPLICATION_ROOT'] = '/app/web'  # Set root of webserver (links in HTML are relative to this)
+bst_frontend.config['APPLICATION_ROOT'] = '/app/web'  # Set root of webserver
 
 
 @bst_frontend.route("/")
@@ -45,13 +45,13 @@ def index():
         pitcherNames = f.readlines()
         pitcherNames = [name.strip() for name in pitcherNames]
 
-    ## TODO: Split into two pages, one for batters and one for pitchers
+    ## TODO: Split into two pages, one for batters and one for pitchers?
     names = batterNames  ## TEMP
 
     players = getPlayerStatsByName(names, 'batter')
 
 
-    scaling=_getScaling()
+    scaling = _getScaling()
     item_counts = {'hotdogs': 1, 'sunflowerseeds': 1, 'pickles': 1}
 
     player_base_returns = {}
@@ -63,26 +63,26 @@ def index():
         player_base_returns[player.name] = round(return_hotdogs + return_sunflowerseeds + return_pickles)
 
 
-    ## HACK: Format player data manually
-    players_formatted = []
-    for player in players:
-        players_formatted.append(
-            {
-                'name': player.name,
-                'team_location': player.team_location,
-                'team_nickname': player.team_nickname,
-                'team_emoji': player.team_emoji,
-                'hits': int(player.hits),
-                'home_runs': int(player.home_runs),
-                'stolen_bases': int(player.stolen_bases),
-                'multiplier': int(player.multiplier)
-            }
-        )
+    # ## HACK: Format player data manually
+    # players_formatted = []
+    # for player in players:
+    #     players_formatted.append(
+    #         {
+    #             'name': player.name,
+    #             'team_location': player.team_location,
+    #             'team_nickname': player.team_nickname,
+    #             'team_emoji': player.team_emoji,
+    #             'hits': int(player.hits),
+    #             'home_runs': int(player.home_runs),
+    #             'stolen_bases': int(player.stolen_bases),
+    #             'multiplier': int(player.multiplier)
+    #         }
+    #     )
 
     ## TEST Render HTML
     return render_template(
         "index.html",
-        players=players_formatted,
+        players=players,
         player_base_returns=player_base_returns,  ## TODO: Format decimal numbers properly first
     )
 

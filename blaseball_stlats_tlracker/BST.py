@@ -6,6 +6,8 @@
 ## TODO: Add a logging system, including API and DB request counts
 ## TODO: Set up a testing URL
 
+## TODO: Make a way to automatically populate batter and pitcher lists by using leaders?
+
 ## Notes
 # Values pulled from the Redis DB will be in raw byte string format and need to be converted with `.decode("utf-8")` before using as strings
 
@@ -35,10 +37,18 @@ class Player():
     'slugging', 'on_base_slugging', 'total_bases', 'gidp', 'sacrifice_bunts', 'sacrifice_flies', 'home_runs', 'hit_by_pitches']
     # Broken fields(?): 'games_played', 'runs_scored', 'sacrifices'
 
+    # Sub-list of batter stats that should be saved and formatted as floats. All others are assumed to be ints.
+    BATTER_STAT_FLOATS = ['batting_average', 'batting_average_risp', 'hits_risp', 'on_base_percentage', 'slugging', 'on_base_slugging']
+
+
     PITCHER_STATS = ['wins', 'losses', 'win_pct', 'earned_run_average', 'games', 'shutouts', 'innings', 'hits_allowed',
     'runs_allowed', 'home_runs_allowed', 'walks', 'strikeouts', 'quality_starts', 'batters_faced', 'whip', 'hits_per_9',
     'home_runs_per_9', 'walks_per_9', 'strikeouts_per_9', 'strikeouts_per_walk', 'hit_by_pitches', 'pitches_thrown']
     # Broken fields(?): 'strikeout_percentage', 'walk_percentage'
+
+    # Sub-list of batter stats that should be saved and formatted as floats. All others are assumed to be ints.
+    PITCHER_STAT_FLOATS = ['win_pct', 'earned_run_average', 'innings', 'whip', 'hits_per_9', 'home_runs_per_9', 'walks_per_9', 'strikeouts_per_9', 'strikeouts_per_walk']
+
 
     # The Redis DB will store linked lists of player data with fields and ordering in this list
     # These names should correspond to the Player object attributes
@@ -81,12 +91,18 @@ class Player():
         return parsedData
 
     def __init__(self, ptype, name, id, data):
-        self.ptype = ptype    # Must be 'batter' or 'pitcher'
+        self.ptype = ptype  # Must be 'batter' or 'pitcher'
         self.name = name
         self.id = id
         self.data = data
         # The 'data' parameter should be formatted as the 'splits' json dict response from API:
         #   { 'season':#, 'stat':{x:x}, 'player':{x:x}, 'team':{x:x} }
+
+        try:
+            self.id_str = id.decode('utf-8')  # Alphanumeric ID without byte string formatting
+        except AttributeError:
+            self.id_str = id  # If it's already a string, keep it as is
+
 
         # By constructing a Player object, we can manage the order of the data values
         #   within the class itself and allow for arbitrary attribute reads from the app side.
@@ -120,14 +136,20 @@ class Player():
             }
         self.team_emoji = team_emojis[self.team_nickname]
 
-        # Set individual player stat attributes (depending on type)
+        # Set individual player stat attributes (depending on player type and data type)
         if (ptype == 'batter'):
             for statName in Player.BATTER_STATS:
-                setattr(self, statName, float(self.data['stat'][statName]))
+                if statName in Player.BATTER_STAT_FLOATS:
+                    setattr(self, statName, float(self.data['stat'][statName]))
+                else:
+                    setattr(self, statName, round(float(self.data['stat'][statName])))
 
         elif (ptype == 'pitcher'):
             for statName in Player.PITCHER_STATS:
-                setattr(self, statName, float(self.data['stat'][statName]))
+                if statName in Player.PITCHER_STAT_FLOATS:
+                    setattr(self, statName, float(self.data['stat'][statName]))
+                else:
+                    setattr(self, statName, round(float(self.data['stat'][statName])))
         else:
             print(f'[Error] Player type cannot be `{ptype}`.')
             sys.exit(2)
