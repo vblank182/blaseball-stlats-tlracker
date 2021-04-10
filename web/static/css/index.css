@@ -192,3 +192,57 @@ body {
     border-radius: 3px;
     background: hsl(0deg 0% 25% / 92%);
 }
+
+
+/* Responsive overrides */
+@media screen and (min-width: 0px) and (max-width: 767px) {
+    /* Phone screens */
+
+    .itm_col {
+        padding-left: 4px;
+        padding-right: 4px;
+        padding-top: 4px;
+        padding-bottom: 6px;
+    }
+    .itm_card_img_div {
+        padding-right: 3px;
+    }
+    .itm_card_img_img {
+        height: 20px;
+        float: right;
+    }
+    .itm_card_num {
+        padding-left: 3px;
+    }
+    .itm_card_num_box {
+        height: 22px;
+        width: 30px;
+        font-size: 0.9rem;
+        font-weight: 700;
+    }
+
+    .stats_cell {
+        font-size: 0.75rem;
+    }
+    .multiplier {
+        font-size: 0.55rem;
+    }
+    .team_emoji {
+        font-size: 0.75rem;
+        line-height: 1rem;
+    }
+    .coin_img {
+        width: 14px;
+
+        margin-bottom: 0.1rem;
+        margin-right: 0.1rem;
+        margin-left: 0.1rem;
+    }
+    .payout_season {
+        font-size: 0.8rem;
+    }
+    .stats_header {
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+}
