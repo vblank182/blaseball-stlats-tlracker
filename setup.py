@@ -5,7 +5,7 @@ install_requires = []  # dependencies satisfied through requirements.txt
 
 setuptools.setup(
     name='blaseball-stlats-tlracker',
-    version='0.1',
+    version='0.2',
     description='Blaseball Stlats Tlracker',
     url='https://github.com/vblank182/blaseball-stlats-tlracker',
     author='Jesse Williams',

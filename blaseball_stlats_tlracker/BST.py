@@ -6,6 +6,8 @@
 ## TODO: Add a logging system, including API and DB request counts
 ## TODO: Set up a testing URL
 
+## TODO: Make a way to automatically populate batter and pitcher lists by using leaders?
+
 ## Notes
 # Values pulled from the Redis DB will be in raw byte string format and need to be converted with `.decode("utf-8")` before using as strings
 
@@ -89,9 +91,10 @@ class Player():
         return parsedData
 
     def __init__(self, ptype, name, id, data):
-        self.ptype = ptype    # Must be 'batter' or 'pitcher'
+        self.ptype = ptype  # Must be 'batter' or 'pitcher'
         self.name = name
         self.id = id
+        self.id_str = id.decode('utf-8')  # Alphanumeric ID without byte string formatting
         self.data = data
         # The 'data' parameter should be formatted as the 'splits' json dict response from API:
         #   { 'season':#, 'stat':{x:x}, 'player':{x:x}, 'team':{x:x} }

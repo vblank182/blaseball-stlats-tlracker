@@ -51,7 +51,7 @@ def index():
     players = getPlayerStatsByName(names, 'batter')
 
 
-    scaling=_getScaling()
+    scaling = _getScaling()
     item_counts = {'hotdogs': 1, 'sunflowerseeds': 1, 'pickles': 1}
 
     player_base_returns = {}

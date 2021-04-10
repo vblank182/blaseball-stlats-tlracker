@@ -1,7 +1,21 @@
-/*** Bootstrap overrides ***/
+/* .table {
+    width: 50%;
+} */
 
 .table td, .table th {
     padding: 0.5rem;
+}
+
+.nopadding {
+    padding: 0px;
+}
+
+.nomargin {
+    margin: 0px;
+}
+
+.centered {
+    text-align: center;
 }
 
 /***************************/
@@ -10,22 +24,171 @@ body {
     background-color: #696e71;
 }
 
-.stats_cont {
+#stats_cont {
     padding-left: 0.5rem;
     padding-right: 0.5rem;
     margin-top: 2rem;
     border-radius: 6px;
-    background-color: #fbfff4;
+    background-color: #f8ffec;
+    box-shadow: 0px 0px 5px 7px #555b5f;
 }
 
-.stats_table {
+.itms {
+    width: 80%;
+    margin: auto;
+}
+
+.itm_col {
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 8px;
+    padding-bottom: 12px;
+}
+
+.itm_card {
+    padding-top: 10px;
+    padding-bottom: 10px;
+
+    background: linear-gradient(180deg, #5aca8d6b, #4a846ba3);
+    /* box-shadow: 0px 1px 1px 0.3px #0000006e; */
+
+    border-top: 0px;
+    border-bottom: 0px;
+    border-radius: 0.5rem;
+
+    /* font-family: "Open Sans", "Helvetica Neue" , sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    text-shadow: 0.3px 0.4px 0.5px #00000030; */
+}
+.itm_card.unused {
+    background: linear-gradient(180deg, #a2a2a261, #2b2b2b70);
+}
+
+.itm_card_row {
+    align-self: center;
+}
+
+/* .itm_card_title { REMOVED
+    text-align: center;
+    color: #505042;
+} */
+
+.itm_card_img_div {
+    padding-left: 0px;
+    padding-right: 6px;
+    align-self: center;
+}
+.itm_card_img_img {
+    height: 30px;
+    float: right;
+}
+.itm_card_num {
+    padding-left: 6px;
+    padding-right: 0px;
+}
+.itm_card_num_box {
+    height: 28px;
+    width: 50px;
+    border-color: ghostwhite;
+    border-radius: 4px;
+
+    font-family: "Helvetica", sans-serif;
+    font-size: 1rem;
+    font-weight: 800;
+    color: #747559;
+}
+
+.stats_header {
+    font-family: "Open Sans", sans-serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #444;
+    user-select: none;
+    cursor: pointer;
+}
+.stats_header:hover {
+    background: #ecf3e2;
+}
+
+.num {
+    font-family: "Roboto Mono", monospace;
+    font-size: 1.1rem;
+}
+
+#stats_header_emoji {
+    width: 7%;
+}
+#stats_header_payout_season {
+    width: 30%;
+}
+
+.sortdir {
+    position: absolute;
+    padding-left: 0.5rem;
 }
 
 .team_emoji {
+    font-size: 1.4rem;
+    line-height: 1rem;
     user-select: none;
 }
+.stats_cell.stats_emoji {
+    text-align: center;
+}
+.stats_cell.stats_name {
+    font-weight: 600;
+    color: #262626;
+}
 
-#coin_img {
-    width: 6%;
+.payout_season {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #205424;
+    text-shadow: 0 0 3px #2e904545;
+}
+
+.coin_img {
+    width: 20px;
     margin-bottom: 0.2rem;
+    margin-right: 0.25rem;
+    margin-left: 0.4rem;
+}
+
+.multiplier {
+    font-family: "Helvetica";
+    font-size: 0.75rem;
+    color: #b93fb5;
+    text-shadow: 0 0 3px #bf52bca3;
+    letter-spacing: 1px;
+    vertical-align: top;
+    display: inline;
+    text-align: center;
+    margin-left: 0.6rem;
+
+    padding-top:    0.10rem;
+    padding-right:  0.25rem;
+    padding-bottom: 0.10rem;
+    padding-left:   0.30rem;
+
+    background: #ecdae4;
+    border-color: #ffb1dcc7;
+    /* box-shadow: 1px 1px 2px #f1c9dfb5; */
+}
+
+#betaTag {
+    position: absolute;
+    color: #FDFDFD;
+    margin-top: 8px;
+    margin-left: -12px;
+    padding: 5px;
+    width: 3.5rem;
+    text-align: center;
+    font-family: "Open Sans","Helvetica Neue",sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    font-weight: 700;
+    border-radius: 3px;
+    background: hsl(0deg 0% 25% / 92%);
 }
