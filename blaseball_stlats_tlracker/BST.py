@@ -94,10 +94,15 @@ class Player():
         self.ptype = ptype  # Must be 'batter' or 'pitcher'
         self.name = name
         self.id = id
-        self.id_str = id.decode('utf-8')  # Alphanumeric ID without byte string formatting
         self.data = data
         # The 'data' parameter should be formatted as the 'splits' json dict response from API:
         #   { 'season':#, 'stat':{x:x}, 'player':{x:x}, 'team':{x:x} }
+
+        try:
+            self.id_str = id.decode('utf-8')  # Alphanumeric ID without byte string formatting
+        except AttributeError:
+            self.id_str = id  # If it's already a string, keep it as is
+
 
         # By constructing a Player object, we can manage the order of the data values
         #   within the class itself and allow for arbitrary attribute reads from the app side.
