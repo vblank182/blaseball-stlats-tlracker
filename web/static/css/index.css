@@ -157,15 +157,17 @@ body {
 }
 
 .multiplier {
+    /* TODO: Make separate colors for x2 and x5 */
     font-family: "Helvetica";
     font-size: 0.75rem;
     color: #b93fb5;
-    text-shadow: 0 0 3px #bf52bca3;
+    text-shadow: 0 0 3px #bf52bc8a;
     letter-spacing: 1px;
     vertical-align: top;
     display: inline;
     text-align: center;
     margin-left: 0.6rem;
+    line-height: 1.5rem;
 
     padding-top:    0.10rem;
     padding-right:  0.25rem;
@@ -174,7 +176,7 @@ body {
 
     background: #ecdae4;
     border-color: #ffb1dcc7;
-    /* box-shadow: 1px 1px 2px #f1c9dfb5; */
+    /* box-shadow: 0px 0px 2px 0px #f1c9dfb5; */
 }
 
 #betaTag {
@@ -226,6 +228,7 @@ body {
     }
     .multiplier {
         font-size: 0.55rem;
+        line-height: 1.2rem;
     }
     .team_emoji {
         font-size: 0.75rem;
