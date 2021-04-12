@@ -144,6 +144,7 @@ class Player():
                 if self.data['stat'][statName] == None:
                     print(f'[Error] Stat `{statName}` not found for this player (got None). Setting to -1.')
                     setattr(self, statName, -1)
+                    continue
 
                 if statName in Player.BATTER_STAT_FLOATS:
                     setattr(self, statName, float(self.data['stat'][statName]))
@@ -156,6 +157,7 @@ class Player():
                 if self.data['stat'][statName] == None:
                     print(f'[Error] Stat `{statName}` not found for this player (got None). Setting to -1.')
                     setattr(self, statName, -1)
+                    continue
 
                 if statName in Player.PITCHER_STAT_FLOATS:
                     setattr(self, statName, float(self.data['stat'][statName]))
