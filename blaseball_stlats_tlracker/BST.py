@@ -140,9 +140,10 @@ class Player():
         # Set individual player stat attributes (depending on player type and data type)
         if (ptype == 'batter'):
             for statName in Player.BATTER_STATS:
+                # Check for missing stat in API response
                 if self.data['stat'][statName] == None:
-                    print(f'[Error] Stat `{statName}` not found for this player (got None). Skipping.')
-                    continue
+                    print(f'[Error] Stat `{statName}` not found for this player (got None). Setting to -1.')
+                    setattr(self, statName, -1)
 
                 if statName in Player.BATTER_STAT_FLOATS:
                     setattr(self, statName, float(self.data['stat'][statName]))
@@ -151,9 +152,10 @@ class Player():
 
         elif (ptype == 'pitcher'):
             for statName in Player.PITCHER_STATS:
+                # Check for missing stat in API response
                 if self.data['stat'][statName] == None:
-                    print(f'[Error] Stat `{statName}` not found for this player (got None). Skipping.')
-                    continue
+                    print(f'[Error] Stat `{statName}` not found for this player (got None). Setting to -1.')
+                    setattr(self, statName, -1)
 
                 if statName in Player.PITCHER_STAT_FLOATS:
                     setattr(self, statName, float(self.data['stat'][statName]))
@@ -401,10 +403,7 @@ def updatePlayerStatCache(playerNames, playerType):
         elif (playerType == 'pitcher'): fields = Player.REDIS_PITCHER_FIELD_ORD
 
         for field in fields:
-            try:
-                rd.rpush(player.id, getattr(player, field))
-            except AttributeError:
-                print(f'[Error] Stat `{field}` not present in this player object (likely skipped from API update). Skipping.')
+            rd.rpush(player.id, getattr(player, field))
 
     return players
 
