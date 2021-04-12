@@ -401,7 +401,10 @@ def updatePlayerStatCache(playerNames, playerType):
         elif (playerType == 'pitcher'): fields = Player.REDIS_PITCHER_FIELD_ORD
 
         for field in fields:
-            rd.rpush(player.id, getattr(player, field))
+            try:
+                rd.rpush(player.id, getattr(player, field))
+            except AttributeError:
+                print(f'[Error] Stat `{field}` not present in this player object (likely skipped from API update). Skipping.')
 
     return players
 
