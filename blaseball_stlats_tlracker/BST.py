@@ -7,6 +7,7 @@
 ## TODO: Set up a testing URL
 
 ## TODO: Make a way to automatically populate batter and pitcher lists by using leaders?
+## TODO: Add handling for players with no current season data
 
 ## Notes
 # Values pulled from the Redis DB will be in raw byte string format and need to be converted with `.decode("utf-8")` before using as strings
@@ -139,6 +140,10 @@ class Player():
         # Set individual player stat attributes (depending on player type and data type)
         if (ptype == 'batter'):
             for statName in Player.BATTER_STATS:
+                if self.data['stat'][statName] == None:
+                    print(f'[Error] Stat `{statName}` not found for this player (got None). Skipping.')
+                    continue
+
                 if statName in Player.BATTER_STAT_FLOATS:
                     setattr(self, statName, float(self.data['stat'][statName]))
                 else:
@@ -146,6 +151,10 @@ class Player():
 
         elif (ptype == 'pitcher'):
             for statName in Player.PITCHER_STATS:
+                if self.data['stat'][statName] == None:
+                    print(f'[Error] Stat `{statName}` not found for this player (got None). Skipping.')
+                    continue
+
                 if statName in Player.PITCHER_STAT_FLOATS:
                     setattr(self, statName, float(self.data['stat'][statName]))
                 else:
