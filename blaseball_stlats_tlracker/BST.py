@@ -7,7 +7,7 @@
 
 ## TODO: Make a way to automatically populate batter and pitcher lists by using leaders
 ## TODO: Add handling for players with no current season data
-## TODO: Handle players that switch teams by adding up all splits from the /v2/stats request. e.g. Alston Cerveza in season 16
+## TODO: Add handling for players that no longer exist?
 ## TODO: Automatically read multipliers from corresponding mods
 ## TODO: Fix item value weights
 
@@ -303,6 +303,26 @@ def _requestStatLeadersFromAPI(group='hitting', season='current'):
                 id_list.append(rsp_json[i]['leaders'][j]['player_id'])
 
     return id_list
+
+
+def _getCurrentSeason():
+    # Uses the /v2/config API call to retrieve the current season number
+    # Season numbers in API are 0-indexed, but we'll return the 1-indexed season number
+    rsp = requests.get(f'https://api.blaseball-reference.com/v2/config')
+
+    global REQUESTS_MADE_API
+    REQUESTS_MADE_API += 1
+
+    if rsp.status_code != 200:
+        print(f'[Error] API returned HTTP status code {rsp.status_code}')
+        return None
+
+    try:
+        seasonNum = int(rsp.json()['defaults']['season']) + 1
+        return seasonNum
+    except IndexError as e:
+        print(f'[Error] API request for config info failed. Error message:\n{e}')
+        return None
 
 
 def _requestPlayerStatsFromAPI(playerIDs, fields, group='hitting', season='current', gameType='R'):
