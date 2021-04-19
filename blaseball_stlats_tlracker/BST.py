@@ -113,12 +113,12 @@ class Player():
         #   accessed arbitrarily from outside without any knowledge of DB ordering.
 
 
-        # Set player team
-        self.team_location = self.data['team']['location']
-        self.team_nickname = self.data['team']['nickname']
+        # Set player team. Take the first split to get the player's most recent team.
+        self.team_location = self.data[0]['team']['location']
+        self.team_nickname = self.data[0]['team']['nickname']
 
         # # Format emoji as an HTML code: &#xFFFFF;
-        # emoji_hex = self.data['team']['team_emoji']
+        # emoji_hex = self.data[0]['team']['team_emoji']
         #
         # ## HACK: If we get a bytestring here, we must be receiving the data from the cache.
         # #        This means the emoji is already HTML formatted and we just need to convert it to a string.
@@ -149,29 +149,29 @@ class Player():
             print(f'[Error] Player type cannot be `{ptype}`.')
             sys.exit(2)
 
-            for statName in STATS:
-                # Assuming we have multiple splits (from different teams) for the player,
-                #   iterate through each split and add up stats for the whole season.
-                statTotal = 0.
-                validStats = False
+        for statName in STATS:
+            # Assuming we have multiple splits (from different teams) for the player,
+            #   iterate through each split and add up stats for the whole season.
+            statTotal = 0.
+            validStats = False
 
-                for i, split in enumerate(self.data):
-                    if split['stat'][statName] == None:  # Check for missing stat in API response
-                        print(f'[Debug] Stat `{statName}` not found in split {i} for this player (got None).')
-                    else:
-                        statTotal += float(split['stat'][statName])
-                        validStats = True
-
-                # If we didn't get any good data for this stat, set it to -1
-                if not validStats:
-                    print(f'[Error] Stat `{statName}` not found in any splits for this player (got None). Setting to -1.')
-                    statTotal = -1.
-
-                # Set retrieved stat value in player object
-                if statName in STAT_FLOATS:
-                    setattr(self, statName, statTotal)
+            for i, split in enumerate(self.data):
+                if split['stat'][statName] == None:  # Check for missing stat in API response
+                    print(f'[Debug] Stat `{statName}` not found in split {i} for this player (got None).')
                 else:
-                    setattr(self, statName, round(statTotal))
+                    statTotal += float(split['stat'][statName])
+                    validStats = True
+
+            # If we didn't get any good data for this stat, set it to -1
+            if not validStats:
+                print(f'[Error] Stat `{statName}` not found in any splits for this player (got None). Setting to -1.')
+                statTotal = -1.
+
+            # Set retrieved stat value in player object
+            if statName in STAT_FLOATS:
+                setattr(self, statName, statTotal)
+            else:
+                setattr(self, statName, round(statTotal))
 
     def setName(self, name):
         self.name = name
@@ -441,13 +441,19 @@ def updatePlayerStatCache(playerNames, playerType):
         # Construct a Player object to hold the data retrieved from the API
         if (playerType == 'batter'):
             playerData = _requestPlayerStatsFromAPI(playerID, Player.BATTER_STATS, group='hitting')[0]
-            if not playerData: continue  # If we got a None response, skip player
+            if not playerData:
+                # If we got a None response, skip player
+                print(f'[Error] No data returned from API for player with ID `{playerID[:]}` (got None). Skipping player.')
+                continue
 
             player = Player(playerType, playerName, playerID, playerData)  # Create player object
 
         elif (playerType == 'pitcher'):
             playerData = _requestPlayerStatsFromAPI(playerID, Player.PITCHER_STATS, group='pitching')[0]
-            if not playerData: continue  # If we got a None response, skip player
+            if not playerData:
+                # If we got a None response, skip player
+                print(f'[Error] No data returned from API for player with ID `{playerID}` (got None). Skipping player.')
+                continue
 
             player = Player(playerType, playerName, playerID, playerData)  # Create player object
 
