@@ -348,6 +348,10 @@ def _requestPlayerStatsFromAPI(playerIDs, fields, group='hitting', season='curre
     stats_list = []
 
     for playerID in playerIDs:
+        # Set explicit season number in request to make sure we get current data for players
+        if season == 'current':
+            season = _getCurrentSeason()
+
         rsp = requests.get(f'https://api.blaseball-reference.com/v2/stats?type=season&group={group}&fields={fieldsStr_URIencoded}&season={season}&gameType={gameType}&playerId={playerID}')
 
         global REQUESTS_MADE_API
@@ -365,12 +369,12 @@ def _requestPlayerStatsFromAPI(playerIDs, fields, group='hitting', season='curre
 
             # Check if we got an empty json response (successful API response, but no data)
             if rsp.json()[0]['splits'] == []:
-                print(f'[Error] No data returned from API for player with ID {playerID}. Skipping player. Error message:\n{e}')
+                print(f'[Error] No data returned from API for player with ID {playerID} in season {season}. Skipping player. Error message:\n{e}')
                 stats_list.append(None)  # Return None for this player
 
             # If not, the API request must have returned an error
             else:
-                print(f'[Error] API request failed for player with ID {playerID}. Skipping player. Error message:\n{e}')
+                print(f'[Error] API request failed for player with ID {playerID} in season {season}. Skipping player. Error message:\n{e}')
                 stats_list.append(None)  # Return None for this player
             continue  # Skip to next player
 
