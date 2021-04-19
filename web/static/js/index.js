@@ -193,12 +193,35 @@ function updatePayouts() {
         var num_meatball = $("#itm_val_meatball").attr("value");
 
         // Get final concession item returns using scaling weights
-        var val_sunflowerseeds = num_sunflowerseeds * scale_sunflowerseeds[num_sunflowerseeds-1]
-        var val_hotdog = num_hotdog * scale_hotdog[num_hotdog-1]
-        var val_pickles = num_pickles * scale_pickles[num_pickles-1]
-        var val_chips = num_chips * scale_chips[num_chips-1]
-        var val_burger = num_burger * scale_burger[num_burger-1]
-        var val_meatball = num_meatball * scale_meatball[num_meatball-1]
+        if (num_sunflowerseeds > 0 && num_sunflowerseeds < 100) {
+            var val_sunflowerseeds = num_sunflowerseeds * scale_sunflowerseeds[num_sunflowerseeds-1]
+        }
+        else { var val_sunflowerseeds = 0 }
+
+        if (num_hotdog > 0 && num_hotdog < 100) {
+            var val_hotdog = num_hotdog * scale_hotdog[num_hotdog-1]
+        }
+        else { var val_hotdog = 0 }
+
+        if (num_pickles > 0 && num_pickles < 100) {
+            var val_pickles = num_pickles * scale_pickles[num_pickles-1]
+        }
+        else { var val_pickles = 0 }
+
+        if (num_chips > 0 && num_chips < 100) {
+            var val_chips = num_chips * scale_chips[num_chips-1]
+        }
+        else { var val_chips = 0 }
+
+        if (num_burger > 0 && num_burger < 100) {
+            var val_burger = num_burger * scale_burger[num_burger-1]
+        }
+        else { var val_burger = 0 }
+
+        if (num_meatball > 0 && num_meatball < 100) {
+            var val_meatball = num_meatball * scale_meatball[num_meatball-1]
+        }
+        else { var val_meatball = 0 }
 
         // Update this player's payout column
         var payout = plyr_mult * (plyr_hits*val_sunflowerseeds + plyr_hr*val_hotdog + plyr_sb*val_pickles);
