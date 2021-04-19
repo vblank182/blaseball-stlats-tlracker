@@ -98,8 +98,8 @@ class Player():
         self.name = name
         self.id = id
         self.data = data
-        # The 'data' parameter should be formatted as the 'splits' json dict response from API:
-        #   { 'season':#, 'stat':{x:x}, 'player':{x:x}, 'team':{x:x} }
+        # The 'data' parameter should be formatted as the 'splits' list from API response:
+        #   [ { 'season':#, 'stat':{x:x}, 'player':{x:x}, 'team':{x:x} }, ... ]
 
         try:
             self.id_str = id.decode('utf-8')  # Alphanumeric ID without byte string formatting
@@ -515,7 +515,8 @@ def getPlayerStatsByName(playerNames, playerType):
         playerData = Player.parseCacheData(playerType, playerCacheData)
 
         # Create the Player object
-        player = Player(playerType, playerName, playerID, playerData)
+        ## HACK: Passing in data as a list so it matches the correct form for the Player constructor
+        player = Player(playerType, playerName, playerID, [playerData])
 
         # Set player's coin multiplier
         multiplier = _getMultiplier(playerName)

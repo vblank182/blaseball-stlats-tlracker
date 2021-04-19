@@ -3,6 +3,7 @@ import redis, os, re
 from urllib import parse
 from blaseball_stlats_tlracker import Player, getPlayerStatsByName
 
+## REMOVE: This function is no longer needed since we have the scaling weights in the JS update function
 def _getScaling():
     scaling = {}
 
@@ -45,45 +46,16 @@ def index():
         pitcherNames = f.readlines()
         pitcherNames = [name.strip() for name in pitcherNames]
 
+
     ## TODO: Split into two pages, one for batters and one for pitchers?
     names = batterNames  ## TEMP
 
     players = getPlayerStatsByName(names, 'batter')
 
 
-    scaling = _getScaling()
-    item_counts = {'hotdogs': 1, 'sunflowerseeds': 1, 'pickles': 1}
-
-    player_base_returns = {}
-    for player in players:
-        return_hotdogs = scaling['hotdogs'][item_counts['hotdogs']] * player.home_runs
-        return_sunflowerseeds = scaling['sunflowerseeds'][item_counts['sunflowerseeds']] * player.hits
-        return_pickles = scaling['pickles'][item_counts['pickles']] * player.stolen_bases
-
-        player_base_returns[player.name] = round(return_hotdogs + return_sunflowerseeds + return_pickles)
-
-
-    # ## HACK: Format player data manually
-    # players_formatted = []
-    # for player in players:
-    #     players_formatted.append(
-    #         {
-    #             'name': player.name,
-    #             'team_location': player.team_location,
-    #             'team_nickname': player.team_nickname,
-    #             'team_emoji': player.team_emoji,
-    #             'hits': int(player.hits),
-    #             'home_runs': int(player.home_runs),
-    #             'stolen_bases': int(player.stolen_bases),
-    #             'multiplier': int(player.multiplier)
-    #         }
-    #     )
-
-    ## TEST Render HTML
     return render_template(
         "index.html",
         players=players,
-        player_base_returns=player_base_returns,  ## TODO: Format decimal numbers properly first
     )
 
 
