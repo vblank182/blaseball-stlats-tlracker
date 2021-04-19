@@ -4,10 +4,12 @@
 ## TODO: Possibly need to convert all data pulled from Redis from a bytestring to a string
 ## TODO: Move Player class and other helper functions into a python library accessible from both
 ## TODO: Add a logging system, including API and DB request counts
-## TODO: Set up a testing URL
 
-## TODO: Make a way to automatically populate batter and pitcher lists by using leaders?
+## TODO: Make a way to automatically populate batter and pitcher lists by using leaders
 ## TODO: Add handling for players with no current season data
+## TODO: Handle players that switch teams by adding up all splits from the /v2/stats request. e.g. Alston Cerveza in season 16
+## TODO: Automatically read multipliers from corresponding mods
+## TODO: Fix item value weights
 
 ## Notes
 # Values pulled from the Redis DB will be in raw byte string format and need to be converted with `.decode("utf-8")` before using as strings
@@ -104,7 +106,6 @@ class Player():
         except AttributeError:
             self.id_str = id  # If it's already a string, keep it as is
 
-
         # By constructing a Player object, we can manage the order of the data values
         #   within the class itself and allow for arbitrary attribute reads from the app side.
         # All operations dependent on the ordering of stat fields should be handled within the Player class.
@@ -139,33 +140,38 @@ class Player():
 
         # Set individual player stat attributes (depending on player type and data type)
         if (ptype == 'batter'):
-            for statName in Player.BATTER_STATS:
-                # Check for missing stat in API response
-                if self.data['stat'][statName] == None:
-                    print(f'[Error] Stat `{statName}` not found for this player (got None). Setting to -1.')
-                    setattr(self, statName, -1)
-                    continue
-
-                if statName in Player.BATTER_STAT_FLOATS:
-                    setattr(self, statName, float(self.data['stat'][statName]))
-                else:
-                    setattr(self, statName, round(float(self.data['stat'][statName])))
-
+            STATS = Player.BATTER_STATS
+            STAT_FLOATS = Player.BATTER_STAT_FLOATS
         elif (ptype == 'pitcher'):
-            for statName in Player.PITCHER_STATS:
-                # Check for missing stat in API response
-                if self.data['stat'][statName] == None:
-                    print(f'[Error] Stat `{statName}` not found for this player (got None). Setting to -1.')
-                    setattr(self, statName, -1)
-                    continue
-
-                if statName in Player.PITCHER_STAT_FLOATS:
-                    setattr(self, statName, float(self.data['stat'][statName]))
-                else:
-                    setattr(self, statName, round(float(self.data['stat'][statName])))
+            STATS = Player.PITCHER_STATS
+            STAT_FLOATS = Player.PITCHER_STAT_FLOATS
         else:
             print(f'[Error] Player type cannot be `{ptype}`.')
             sys.exit(2)
+
+            for statName in STATS:
+                # Assuming we have multiple splits (from different teams) for the player,
+                #   iterate through each split and add up stats for the whole season.
+                statTotal = 0.
+                validStats = False
+
+                for i, split in enumerate(self.data):
+                    if split['stat'][statName] == None:  # Check for missing stat in API response
+                        print(f'[Debug] Stat `{statName}` not found in split {i} for this player (got None).')
+                    else:
+                        statTotal += float(split['stat'][statName])
+                        validStats = True
+
+                # If we didn't get any good data for this stat, set it to -1
+                if not validStats:
+                    print(f'[Error] Stat `{statName}` not found in any splits for this player (got None). Setting to -1.')
+                    statTotal = -1.
+
+                # Set retrieved stat value in player object
+                if statName in STAT_FLOATS:
+                    setattr(self, statName, statTotal)
+                else:
+                    setattr(self, statName, round(statTotal))
 
     def setName(self, name):
         self.name = name
@@ -197,6 +203,7 @@ def _createDirectory(dir):
     if not os.path.exists(abs_dir):
         os.mkdir(abs_dir)
 
+## DEPRECATED
 def _requestPlayerIDsFromAPI(playerNames):
     # Takes a list of player names (or a single player name string) and returns a dict of (name:id) pairs from the blaseball-reference API
 
@@ -228,62 +235,7 @@ def _requestPlayerIDsFromAPI(playerNames):
 
     return playerIDs
 
-def _requestPlayerStatsFromAPI(playerIDs, fields, group='hitting', season='current', gameType='R'):
-    #  playerIDs : List of player IDs
-    #  fields    : List of stat fields (strings) as defined by /v2/config in API
-    #  group     : 'hitting' or 'pitching'
-    #  season    : 'current' or an integer (1-indexed)
-    #  gameType  : 'R' for regular season, 'P' for postseason
-
-    ## TODO: Handle API errors if bad fields are provided
-
-    # If a single player ID was passed in, make it a list
-    if type(playerIDs).__name__ == 'str': playerIDs = [playerIDs]
-
-    # If a number was passed in for season, set the season
-    # Seasons are 0-indexed in API, so subtract 1 and convert to string
-    if season != 'current':
-        season = f'{season-1}'
-
-    fieldsStr = ",".join(fields)  # Make comma-separated list of fields to feed into API call
-    fieldsStr_URIencoded = quote(fieldsStr)
-
-    stats_list = []
-
-    for playerID in playerIDs:
-        rsp = requests.get(f'https://api.blaseball-reference.com/v2/stats?type=season&group={group}&fields={fieldsStr_URIencoded}&season={season}&gameType={gameType}&playerId={playerID}')
-
-        global REQUESTS_MADE_API
-        REQUESTS_MADE_API += 1
-
-        if rsp.status_code != 200:
-            print(f'[Error] API returned HTTP status code {rsp.status_code}')
-            sys.exit(1)
-
-        try:
-            rsp_json = rsp.json()[0]['splits'][0]  # Read API response into a JSON list object
-        except IndexError as e:
-            # If list is empty, either we didn't get a proper response (likely a misspelling or missing DB entry),
-            #   or we got an empty response (likely because the player doesn't have any data for the selected season).
-
-            # Check if we got an empty json response (successful API response, but no data)
-            if rsp.json()[0]['splits'] == []:
-                print(f'[Error] No data returned from API for player with ID {playerID}. Skipping player. Error message:\n{e}')
-                stats_list.append(None)  # Return None for this player
-
-            # If not, the API request must have returned an error
-            else:
-                print(f'[Error] API request failed for player with ID {playerID}. Skipping player. Error message:\n{e}')
-                stats_list.append(None)  # Return None for this player
-            continue  # Skip to next player
-
-        # Return list of JSON "splits" response for each player, including player info, team, and stats
-        # Available keys: 'season', 'stat' (dict), 'player', 'team'
-        stats_list.append(rsp_json)
-
-    return stats_list
-
-
+## DEPRECATED
 def _updatePlayerIdCache(playerNames, redis_connection=None, force_update=False):
     # Run this on player name lists before making stat requests
     # Returns dict of player names to IDs which can be used immediately after calling for an update
@@ -319,6 +271,95 @@ def _updatePlayerIdCache(playerNames, redis_connection=None, force_update=False)
         playerNameToIdDict[playerName] = playerID
 
     return playerNameToIdDict
+
+
+def _requestStatLeadersFromAPI(group='hitting', season='current'):
+
+    rsp = requests.get(f'https://api.blaseball-reference.com/v2/stats/leaders?group={group}&season={season}&type=season')
+
+    global REQUESTS_MADE_API
+    REQUESTS_MADE_API += 1
+
+    if rsp.status_code != 200:
+        print(f'[Error] API returned HTTP status code {rsp.status_code}')
+        return None
+
+    try:
+        rsp_json = rsp.json()[0]['leaderCategories']  # Read API response into a JSON list object
+    except IndexError:
+        # If list is empty, we didn't get a proper response (likely a misspelling or missing DB entry)
+        print(f'[Error] API sent bad response.')
+        return None
+
+    # Pull the player IDs out of each leader list
+    id_list = []
+
+    for i in range(len(rsp_json)):
+        stat_name = rsp_json[i]['leaderCategory']
+
+        # If the category has more than 100 players, assume it's a category where all players are tied at the same value and skip it
+        if len(rsp_json[i]['leaders']) < 100:
+            for j in range(len(rsp_json[i]['leaders'])):
+                id_list.append(rsp_json[i]['leaders'][j]['player_id'])
+
+    return id_list
+
+
+def _requestPlayerStatsFromAPI(playerIDs, fields, group='hitting', season='current', gameType='R'):
+    #  playerIDs : List of player IDs
+    #  fields    : List of stat fields (strings) as defined by /v2/config in API
+    #  group     : 'hitting' or 'pitching'
+    #  season    : 'current' or an integer (1-indexed)
+    #  gameType  : 'R' for regular season, 'P' for postseason
+
+    ## TODO: Handle API errors if bad fields are provided
+
+    # If a single player ID was passed in, make it a list
+    if type(playerIDs).__name__ == 'str': playerIDs = [playerIDs]
+
+    # If a number was passed in for season, set the season
+    # Seasons are 0-indexed in API, so subtract 1 and convert to string
+    if season != 'current':
+        season = f'{season-1}'
+
+    fieldsStr = ",".join(fields)  # Make comma-separated list of fields to feed into API call
+    fieldsStr_URIencoded = quote(fieldsStr)
+
+    stats_list = []
+
+    for playerID in playerIDs:
+        rsp = requests.get(f'https://api.blaseball-reference.com/v2/stats?type=season&group={group}&fields={fieldsStr_URIencoded}&season={season}&gameType={gameType}&playerId={playerID}')
+
+        global REQUESTS_MADE_API
+        REQUESTS_MADE_API += 1
+
+        if rsp.status_code != 200:
+            print(f'[Error] API returned HTTP status code {rsp.status_code}')
+            return None
+
+        try:
+            rsp_json = rsp.json()[0]['splits']  # Read API response into a JSON list object
+        except IndexError as e:
+            # If list is empty, either we didn't get a proper response (likely a misspelling or missing DB entry),
+            #   or we got an empty response (likely because the player doesn't have any data for the selected season).
+
+            # Check if we got an empty json response (successful API response, but no data)
+            if rsp.json()[0]['splits'] == []:
+                print(f'[Error] No data returned from API for player with ID {playerID}. Skipping player. Error message:\n{e}')
+                stats_list.append(None)  # Return None for this player
+
+            # If not, the API request must have returned an error
+            else:
+                print(f'[Error] API request failed for player with ID {playerID}. Skipping player. Error message:\n{e}')
+                stats_list.append(None)  # Return None for this player
+            continue  # Skip to next player
+
+        # Return list of JSON "splits" response for each player, including player info, team, and stats
+        # Available keys: 'season', 'stat' (dict), 'player', 'team'
+        stats_list.append(rsp_json)
+
+    return stats_list
+
 
 def _getMultiplier(playerName):
     ## TODO: Replace this with a system for reading player multipliers from the API
