@@ -337,7 +337,11 @@ def _requestPlayerStatsFromAPI(playerIDs, fields, group='hitting', season='curre
     # If a single player ID was passed in, make it a list
     if type(playerIDs).__name__ == 'str': playerIDs = [playerIDs]
 
-    # If a number was passed in for season, set the season
+    # Set explicit season number in request to make sure we get current data for players
+    if season == 'current':
+        season = _getCurrentSeason()
+
+    # If a number was passed in or set for the season, set the correct season number
     # Seasons are 0-indexed in API, so subtract 1 and convert to string
     if season != 'current':
         season = f'{season-1}'
@@ -348,9 +352,6 @@ def _requestPlayerStatsFromAPI(playerIDs, fields, group='hitting', season='curre
     stats_list = []
 
     for playerID in playerIDs:
-        # Set explicit season number in request to make sure we get current data for players
-        if season == 'current':
-            season = _getCurrentSeason()
 
         rsp = requests.get(f'https://api.blaseball-reference.com/v2/stats?type=season&group={group}&fields={fieldsStr_URIencoded}&season={season}&gameType={gameType}&playerId={playerID}')
 
@@ -443,7 +444,7 @@ def updatePlayerStatCache(playerNames, playerType):
             playerData = _requestPlayerStatsFromAPI(playerID, Player.BATTER_STATS, group='hitting')[0]
             if not playerData:
                 # If we got a None response, skip player
-                print(f'[Error] No data returned from API for player with ID `{playerID[:]}` (got None). Skipping player.')
+                print(f'[Error] No data returned from API for player with ID `{playerID}` (got None). Skipping player.')
                 continue
 
             player = Player(playerType, playerName, playerID, playerData)  # Create player object
