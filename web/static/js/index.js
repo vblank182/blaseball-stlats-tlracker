@@ -15,17 +15,6 @@ function preload(state) {
 
 }
 
-function updateValues(element) {
-    // Update value attr to match current input box property value
-    $(element).attr("value", element.value);
-
-    // Update cookie for this item
-    saveCookie($(element).attr("name"), $(element).attr("value"))
-
-    // Refresh payouts with new numbers
-    updatePayouts();
-}
-
 function displayMultipliers() {
     // If a player has a coin multiplier, show it next to their name.
     $(".multiplier").each(function () {
@@ -61,6 +50,13 @@ function initBinds() {
         }
         return false;
     });
+
+
+    // Set up binding to detect slot modifier selector changes
+    $("#slots_modifier_num_box").on("input", function () {
+        updateSlotsModifier();
+    });
+
 
     // Bind sort function to each header
     var columns = ["name", "hits", "hr", "sb", "payout_season"];
@@ -127,6 +123,35 @@ function initBinds() {
     }
 }
 
+function updateValues(element) {
+    // Update value attr to match current input box property value
+    $(element).attr("value", element.value);
+
+    // Update cookie for this item
+    saveCookie($(element).attr("name"), $(element).attr("value"));
+
+    // Refresh payouts with new numbers
+    updatePayouts();
+}
+
+function updateSlotsModifier() {
+    var modifiers = [650,350,250,190,150,125,110,100,90,80,70,63,56,50,45,39,34,30,25,21,17,13,9,5,0];
+
+    var numbox = $("#slots_modifier_num_box")[0];
+    var percentage = $("#slots_modifier_percentage")[0];
+
+    $(numbox).attr("value", numbox.value);  // Update value attr of num box
+
+    $(percentage)[0].innerHTML = modifiers[numbox.value - 1];  // Change percentage text to match new item slot count
+
+    // Update cookie for slot count
+    saveCookie($("#slots_modifier_num_box").attr("name"), $("#slots_modifier_num_box").attr("value"));
+
+    // Refresh payouts with new numbers
+    updatePayouts();
+}
+
+
 // Cookies //
 function saveCookie(name, data) {
     cookie_name = "bst-" + name;
@@ -151,8 +176,16 @@ function getItemCounts() {
             $(this).attr("value", item_count);
         }
     });
-
 }
+
+
+function getSlotMultiplier() {
+    slot_count = loadCookie($("#slots_modifier_num_box").attr("name"));
+    if (slot_count != "") {
+        $("#slots_modifier_num_box").attr("value", slot_count);
+    }
+}
+
 
 function updatePayouts() {
 
@@ -223,9 +256,16 @@ function updatePayouts() {
         }
         else { var val_meatball = 0 }
 
+        // Read the slots multiplier value to multiply the final payout
+        var modvalue = $("#slots_modifier_percentage").html() / 100;
+
         // Update this player's payout column
         var payout = plyr_mult * (plyr_hits*val_sunflowerseeds + plyr_hr*val_hotdog + plyr_sb*val_pickles);
-        this.innerHTML = payout;
+
+        var payout_with_mod = Math.round(modvalue * payout);
+
+        this.innerHTML = payout_with_mod;
+
         //this.innerHTML = formatNumberWithCommas(payout);  // TODO: Need to fix comma sorting problem to use this
 
     });

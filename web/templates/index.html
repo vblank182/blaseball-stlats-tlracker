@@ -33,173 +33,190 @@
 
         <div class="row row-cols-3 itms">
 
-        <!-- Start of Sunflower Seeds -->
-        <div class="col-md-2 itm_col">
-            <div class="card itm_card">
+            <!-- Start of Sunflower Seeds -->
+            <div class="col-md-2 itm_col">
+                <div class="card itm_card">
 
-                <div class="row itm_card_row">
-                    <div class="itm_card_img_div">
-                        <img src="{{ url_for('static', filename='img/itm_sunflowerseeds.png') }}" class="itm_card_img_img" data-toggle="tooltip" data-placement="top" title="Sunflower Seeds">
+                    <div class="row itm_card_row">
+                        <div class="itm_card_img_div">
+                            <img src="{{ url_for('static', filename='img/itm_sunflowerseeds.png') }}" class="itm_card_img_img" data-toggle="tooltip" data-placement="top" title="Sunflower Seeds">
+                        </div>
+                        <div class="itm_card_num">
+                            <input id="itm_val_sunflowerseeds" class="itm_card_num_box" type="number" name="sunflower-seeds" min="0" max="99" value="1">
+                        </div>
                     </div>
-                    <div class="itm_card_num">
-                        <input id="itm_val_sunflowerseeds" class="itm_card_num_box" type="number" name="sunflower-seeds" min="0" max="99" value="1">
-                    </div>
+
                 </div>
+            </div>
+            <!-- End of Sunflower Seeds -->
 
+
+            <!-- Start of Hot Dog -->
+            <div class="col-md-2 itm_col">
+                <div class="card itm_card">
+
+                    <div class="row itm_card_row">
+                        <div class="itm_card_img_div">
+                            <img src="{{ url_for('static', filename='img/itm_hotdog.png') }}" class="itm_card_img_img" data-toggle="tooltip" data-placement="top" title="Hot Dog">
+                        </div>
+                        <div class="itm_card_num">
+                            <input id="itm_val_hotdog" class="itm_card_num_box" type="number" name="hot-dog" min="0" max="99" value="1">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- Start of Hot Dog -->
+
+
+            <!-- Start of Pickles -->
+            <div class="col-md-2 itm_col">
+                <div class="card itm_card">
+
+                    <div class="row itm_card_row">
+                        <div class="itm_card_img_div">
+                            <img src="{{ url_for('static', filename='img/itm_pickles.png') }}" class="itm_card_img_img" data-toggle="tooltip" data-placement="top" title="Pickles">
+                        </div>
+                        <div class="itm_card_num">
+                            <input id="itm_val_pickles" class="itm_card_num_box" type="number" name="pickles" min="0" max="99" value="1">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- Start of Pickles -->
+
+
+            <!-- Start of Chips -->
+            <div class="col-md-2 itm_col">
+                <div class="card itm_card unused">
+
+                    <div class="row itm_card_row">
+                        <div class="itm_card_img_div">
+                            <img src="{{ url_for('static', filename='img/itm_chips.png') }}" class="itm_card_img_img" data-toggle="tooltip" data-placement="top" title="Chips">
+                        </div>
+                        <div class="itm_card_num">
+                            <input id="itm_val_chips" class="itm_card_num_box" type="number" name="chips" min="0" max="99" value="1">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- Start of Chips -->
+
+
+            <!-- Start of Burger -->
+            <div class="col-md-2 itm_col">
+                <div class="card itm_card unused">
+
+                    <div class="row itm_card_row">
+                        <div class="itm_card_img_div">
+                            <img src="{{ url_for('static', filename='img/itm_burger.png') }}" class="itm_card_img_img" data-toggle="tooltip" data-placement="top" title="Burger">
+                        </div>
+                        <div class="itm_card_num">
+                            <input id="itm_val_burger" class="itm_card_num_box" type="number" name="burger" min="0" max="99" value="1">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- Start of Burger -->
+
+
+            <!-- Start of Meatball -->
+            <div class="col-md-2 itm_col">
+                <div class="card itm_card unused">
+
+                    <div class="row itm_card_row">
+                        <div class="itm_card_img_div">
+                            <img src="{{ url_for('static', filename='img/itm_meatball.png') }}" class="itm_card_img_img" data-toggle="tooltip" data-placement="top" title="Meatball">
+                        </div>
+                        <div class="itm_card_num">
+                            <input id="itm_val_meatball" class="itm_card_num_box" type="number" name="meatball" min="0" max="99" value="1">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- Start of Meatball -->
+
+
+
+        </div>
+
+
+        <div class="row" style="padding-bottom: 0.5rem;">
+            <div class="container container-md" style="text-align: center;">
+                <div id="slots_modifier">
+                    <div class="slots_modifier_text">Slots: </div>
+                    <div style="display: inline;">
+                        <input id="slots_modifier_num_box" type="number" name="slots" min="1" max="24" value="8">
+                    </div>
+
+                    <div class="slots_modifier_text">=&nbsp;<span id="slots_modifier_percentage"></span>% Payout Modifier</div>
+
+                </div>
             </div>
         </div>
-        <!-- End of Sunflower Seeds -->
-
-
-        <!-- Start of Hot Dog -->
-        <div class="col-md-2 itm_col">
-            <div class="card itm_card">
-
-                <div class="row itm_card_row">
-                    <div class="itm_card_img_div">
-                        <img src="{{ url_for('static', filename='img/itm_hotdog.png') }}" class="itm_card_img_img" data-toggle="tooltip" data-placement="top" title="Hot Dog">
-                    </div>
-                    <div class="itm_card_num">
-                        <input id="itm_val_hotdog" class="itm_card_num_box" type="number" name="hot-dog" min="0" max="99" value="1">
-                    </div>
-                </div>
-
-            </div>
-        </div>
-        <!-- Start of Hot Dog -->
-
-
-        <!-- Start of Pickles -->
-        <div class="col-md-2 itm_col">
-            <div class="card itm_card">
-
-                <div class="row itm_card_row">
-                    <div class="itm_card_img_div">
-                        <img src="{{ url_for('static', filename='img/itm_pickles.png') }}" class="itm_card_img_img" data-toggle="tooltip" data-placement="top" title="Pickles">
-                    </div>
-                    <div class="itm_card_num">
-                        <input id="itm_val_pickles" class="itm_card_num_box" type="number" name="pickles" min="0" max="99" value="1">
-                    </div>
-                </div>
-
-            </div>
-        </div>
-        <!-- Start of Pickles -->
-
-
-        <!-- Start of Chips -->
-        <div class="col-md-2 itm_col">
-            <div class="card itm_card unused">
-
-                <div class="row itm_card_row">
-                    <div class="itm_card_img_div">
-                        <img src="{{ url_for('static', filename='img/itm_chips.png') }}" class="itm_card_img_img" data-toggle="tooltip" data-placement="top" title="Chips">
-                    </div>
-                    <div class="itm_card_num">
-                        <input id="itm_val_chips" class="itm_card_num_box" type="number" name="chips" min="0" max="99" value="1">
-                    </div>
-                </div>
-
-            </div>
-        </div>
-        <!-- Start of Chips -->
-
-
-        <!-- Start of Burger -->
-        <div class="col-md-2 itm_col">
-            <div class="card itm_card unused">
-
-                <div class="row itm_card_row">
-                    <div class="itm_card_img_div">
-                        <img src="{{ url_for('static', filename='img/itm_burger.png') }}" class="itm_card_img_img" data-toggle="tooltip" data-placement="top" title="Burger">
-                    </div>
-                    <div class="itm_card_num">
-                        <input id="itm_val_burger" class="itm_card_num_box" type="number" name="burger" min="0" max="99" value="1">
-                    </div>
-                </div>
-
-            </div>
-        </div>
-        <!-- Start of Burger -->
-
-
-        <!-- Start of Meatball -->
-        <div class="col-md-2 itm_col">
-            <div class="card itm_card unused">
-
-                <div class="row itm_card_row">
-                    <div class="itm_card_img_div">
-                        <img src="{{ url_for('static', filename='img/itm_meatball.png') }}" class="itm_card_img_img" data-toggle="tooltip" data-placement="top" title="Meatball">
-                    </div>
-                    <div class="itm_card_num">
-                        <input id="itm_val_meatball" class="itm_card_num_box" type="number" name="meatball" min="0" max="99" value="1">
-                    </div>
-                </div>
-
-            </div>
-        </div>
-        <!-- Start of Meatball -->
-
 
     </div>
-</div>
 
 
-<!-- Preloading: Spinner -->
-<div class="sk-container">
-    <div class="sk-folding-cube">
-        <div class="sk-cube1 sk-cube"></div>
-        <div class="sk-cube2 sk-cube"></div>
-        <div class="sk-cube4 sk-cube"></div>
-        <div class="sk-cube3 sk-cube"></div>
+    <!-- Preloading: Spinner -->
+    <div class="sk-container">
+        <div class="sk-folding-cube">
+            <div class="sk-cube1 sk-cube"></div>
+            <div class="sk-cube2 sk-cube"></div>
+            <div class="sk-cube4 sk-cube"></div>
+            <div class="sk-cube3 sk-cube"></div>
+        </div>
     </div>
-</div>
 
-<table class="table table-striped table-hover" id="stats_table">
+    <table class="table table-striped table-hover" id="stats_table">
 
-    <!---- Preloading: Hide elements ---->
-    <script type="text/javascript">
-        preload(true);
-    </script>
-    <!----------------------------------->
+        <!---- Preloading: Hide elements ---->
+        <script type="text/javascript">
+            preload(true);
+        </script>
+        <!----------------------------------->
 
-    <thead>
-        <tr>
-            <th scope="col" id="stats_header_emoji"></th> <!-- Emoji -->
-            <th scope="col" id="stats_header_name" class="stats_header">Name<span class="sortdir" id="sortdir_name"></span></th>
-            <th scope="col" id="stats_header_hits" class="stats_header centered">Hits<span class="sortdir" id="sortdir_hits"></span></th>
-            <th scope="col" id="stats_header_hr" class="stats_header centered">HR<span class="sortdir" id="sortdir_hr"></span></th>
-            <th scope="col" id="stats_header_sb" class="stats_header centered">SB<span class="sortdir" id="sortdir_sb"></span></th>
-            <!-- <th scope="col">BA</th> -->
-            <th scope="col" id="stats_header_payout_season" class="stats_header">Payout this season<span class="sortdir" id="sortdir_payout_season"></span></th>
-            <!-- ## TODO: <th scope="col">Payout last season</th>
-            <!-- ## TODO: <th scope="col">Payout per game</th> -->
-        </tr>
-    </thead>
-    <tbody>
+        <thead>
+            <tr>
+                <th scope="col" id="stats_header_emoji"></th> <!-- Emoji -->
+                <th scope="col" id="stats_header_name" class="stats_header">Name<span class="sortdir" id="sortdir_name"></span></th>
+                <th scope="col" id="stats_header_hits" class="stats_header centered">Hits<span class="sortdir" id="sortdir_hits"></span></th>
+                <th scope="col" id="stats_header_hr" class="stats_header centered">HR<span class="sortdir" id="sortdir_hr"></span></th>
+                <th scope="col" id="stats_header_sb" class="stats_header centered">SB<span class="sortdir" id="sortdir_sb"></span></th>
+                <!-- <th scope="col">BA</th> -->
+                <th scope="col" id="stats_header_payout_season" class="stats_header">Payout this season<span class="sortdir" id="sortdir_payout_season"></span></th>
+                <!-- ## TODO: <th scope="col">Payout last season</th>
+                <!-- ## TODO: <th scope="col">Payout per game</th> -->
+            </tr>
+        </thead>
+        <tbody>
 
-        {% for player in players %}
-        <tr class="stats_row" player_id="{{ player.id_str }}" player_mult="{{ player.multiplier }}">
-            <td class="stats_cell stats_emoji" player_id="{{ player.id_str }}">
-                <span class="team_emoji" data-toggle="tooltip" data-placement="top" title="{{ player.team_location }} {{ player.team_nickname }}">{{ player.team_emoji }}</span>
-            </td>
+            {% for player in players %}
+            <tr class="stats_row" player_id="{{ player.id_str }}" player_mult="{{ player.multiplier }}">
+                <td class="stats_cell stats_emoji" player_id="{{ player.id_str }}">
+                    <span class="team_emoji" data-toggle="tooltip" data-placement="top" title="{{ player.team_location }} {{ player.team_nickname }}">{{ player.team_emoji }}</span>
+                </td>
 
-            <td class="stats_cell stats_name" player_id="{{ player.id_str }}">{{ player.name }}<div class="card multiplier"></div></td>  <!-- TODO: Add multiplier tag if not 1 -->
-            <td class="stats_cell stats_hits num centered" player_id="{{ player.id_str }}">{{ player.hits }}</td>
-            <td class="stats_cell stats_hr num centered" player_id="{{ player.id_str }}">{{ player.home_runs }}</td>
-            <td class="stats_cell stats_sb num centered" player_id="{{ player.id_str }}">{{ player.stolen_bases }}</td>
+                <td class="stats_cell stats_name" player_id="{{ player.id_str }}">{{ player.name }}<div class="card multiplier"></div></td>  <!-- TODO: Add multiplier tag if not 1 -->
+                <td class="stats_cell stats_hits num centered" player_id="{{ player.id_str }}">{{ player.hits }}</td>
+                <td class="stats_cell stats_hr num centered" player_id="{{ player.id_str }}">{{ player.home_runs }}</td>
+                <td class="stats_cell stats_sb num centered" player_id="{{ player.id_str }}">{{ player.stolen_bases }}</td>
 
-            {# Payout this season #}
-            <td class="stats_cell stats_payout_season num" player_id="{{ player.id_str }}">
-                <img class="coin_img" src="{{ url_for('static', filename='img/coin.png') }}">
-                <span class="payout_season"><!-- Blank until updated by JS --></span>
-            </td>
+                {# Payout this season #}
+                <td class="stats_cell stats_payout_season num" player_id="{{ player.id_str }}">
+                    <img class="coin_img" src="{{ url_for('static', filename='img/coin.png') }}">
+                    <span class="payout_season"><!-- Blank until updated by JS --></span>
+                </td>
 
-        </tr>
-        {% endfor %}
+            </tr>
+            {% endfor %}
 
-    </tbody>
-</table>
+        </tbody>
+    </table>
 
 </div>
 
@@ -220,13 +237,20 @@
 
         initBinds();
 
-        // Update item counts with cookies if available
+        // Update item counts with cookies if available (must be done before first update)
         getItemCounts();
+
+        // Update number of slots with cookie if available (must be done before first update)
+        getSlotMultiplier();
 
         // Refresh table payout numbers
         updatePayouts();
 
+        // Print player coin multipliers if applicable
         displayMultipliers();
+
+        // Initial update for slot number percentage
+        updateSlotsModifier();
 
         // Sort by payouts
         sortTable("stats_table", "stats_payout_season", "int", "descending");
